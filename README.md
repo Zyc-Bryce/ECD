@@ -36,59 +36,140 @@ The core idea is simple: planning owns meaning, coding owns execution, and closu
 
 ## Installation
 
-### Windows (PowerShell)
+Choose one of the methods below. All examples use **Alice** as the Windows username and **my-app** as the project name — replace them with your own.
+
+---
+
+### Method 1: Command-Line Install
+
+#### Windows (PowerShell)
 
 ```powershell
 # Clone the repository
-git clone https://github.com/<your-username>/evolutionary-constraint-development.git
+git clone https://github.com/Zyc-Bryce/evolutionary-constraint-development.git
 
-# Install as a user-level skill (globally available)
+# --- User-level install (available in every project) ---
 Copy-Item -Recurse evolutionary-constraint-development $env:USERPROFILE\.claude\skills\
 
-# Or install as a project-level skill (only in current project)
+# --- Project-level install (only for the current project) ---
+# First navigate to your project root, then:
 Copy-Item -Recurse evolutionary-constraint-development .\.claude\skills\
 ```
 
-### macOS / Linux
+#### macOS / Linux
 
 ```bash
 # Clone the repository
-git clone https://github.com/<your-username>/evolutionary-constraint-development.git
+git clone https://github.com/Zyc-Bryce/evolutionary-constraint-development.git
 
-# Install as a user-level skill (globally available)
+# User-level install (available in every project)
 cp -r evolutionary-constraint-development ~/.claude/skills/
 
-# Or install as a project-level skill (only in current project)
+# Project-level install (only for the current project)
 cp -r evolutionary-constraint-development /path/to/your-project/.claude/skills/
 ```
 
-### Direct Clone (all platforms)
+#### Direct Clone Into Skills Directory (all platforms)
 
 ```bash
-# Clone directly into the user-level skills directory
 # Windows (PowerShell):
-git clone https://github.com/<your-username>/evolutionary-constraint-development.git $env:USERPROFILE\.claude\skills\evolutionary-constraint-development
+git clone https://github.com/Zyc-Bryce/evolutionary-constraint-development.git $env:USERPROFILE\.claude\skills\evolutionary-constraint-development
 
 # macOS / Linux:
-git clone https://github.com/<your-username>/evolutionary-constraint-development.git ~/.claude/skills/evolutionary-constraint-development
+git clone https://github.com/Zyc-Bryce/evolutionary-constraint-development.git ~/.claude/skills/evolutionary-constraint-development
 ```
 
-The skill will be automatically discovered by Claude Code when working in the relevant directory (project-level) or globally (user-level).
+After installation, the skill is automatically discovered the next time you start Claude Code in the relevant directory.
+
+---
+
+### Method 2: Manual Install (No Terminal Required)
+
+If you prefer to avoid the command line, follow these steps.
+
+#### Step 1 — Download
+
+Visit https://github.com/Zyc-Bryce/evolutionary-constraint-development and click **Code → Download ZIP**. Extract the ZIP to a folder of your choice.
+
+**Example:** Extract to `C:\Users\Alice\Downloads\evolutionary-constraint-development`.
+
+#### Step 2 — Choose install scope
+
+Pick **one** of the two options below.
+
+---
+
+**Option A: User-level install (the skill is available in every project)**
+
+1. Open File Explorer and navigate to `%USERPROFILE%\.claude\skills\`.
+
+   *For Alice, the full path is:* `C:\Users\Alice\.claude\skills\`
+
+2. If the `skills` folder does not exist, create it:
+   - Right-click → **New → Folder**, name it `skills`.
+
+3. Copy (or move) the `evolutionary-constraint-development` folder you extracted in Step 1 into `skills\`.
+
+   *After copying, the path should look like:* `C:\Users\Alice\.claude\skills\evolutionary-constraint-development\SKILL.md`
+
+---
+
+**Option B: Project-level install (the skill is only available in one project)**
+
+1. In File Explorer, navigate to your project root.
+
+   *For example:* `C:\Users\Alice\Projects\my-app`
+
+2. Inside the project, look for a `.claude` folder. If it doesn't exist, create it:
+   - Right-click → **New → Folder**, name it `.claude`
+   - *Windows may warn about names starting with a dot — that's OK, confirm it.*
+
+3. Inside `.claude`, look for a `skills` folder. If it doesn't exist, create it.
+
+4. Copy (or move) the `evolutionary-constraint-development` folder you extracted in Step 1 into `.claude\skills\`.
+
+   *After copying, the path should look like:* `C:\Users\Alice\Projects\my-app\.claude\skills\evolutionary-constraint-development\SKILL.md`
+
+---
+
+After either option, restart Claude Code (or start it in the relevant project directory), and the skill will be discovered automatically.
+
+---
+
+### Method 3: Manual Install (macOS / Linux, No Terminal)
+
+1. Visit https://github.com/Zyc-Bryce/evolutionary-constraint-development and click **Code → Download ZIP**.
+2. Extract the ZIP to a folder (e.g., `~/Downloads/evolutionary-constraint-development`).
+3. Open Finder (macOS) or your file manager (Linux). Enable "Show Hidden Files" so the `.claude` folder is visible.
+4. **User-level:** Copy the extracted folder into `~/.claude/skills/`. Create `skills/` inside `~/.claude/` if it doesn't exist.
+5. **Project-level:** Copy the extracted folder into `<your-project>/.claude/skills/`.
 
 ## CLI Quick Start
 
 The CLI is intentionally thin — it handles rendering, validation, and run recording. The reasoning work still belongs to the model following the skill.
+
+> **Platform note:** Commands below use `python3` on macOS/Linux and `python` on Windows. Paths use the hypothetical user **Alice** and project **my-app** — replace them with your own.
 
 ### `ecl pre` — Initialize Stage A approval workspace
 
 Scaffolds a normalized case JSON from a raw request, renders the Obsidian bundle, and validates it. This starts the high-interaction clarification phase (Stage A).
 
 ```bash
+# macOS / Linux
 python3 scripts/ecl.py pre \
   --request "Build a minimal app with a dashboard, an empty state, and one write flow." \
-  --output /abs/path/to/bundle \
-  --repo-path /abs/path/to/repo \
-  --project-path /abs/path/to/repo
+  --output /home/alice/projects/ecd-demo/bundle \
+  --repo-path /home/alice/projects/my-app \
+  --project-path /home/alice/projects/my-app
+```
+
+```powershell
+# Windows (PowerShell)
+python scripts/ecl.py pre `
+  --request "Build a minimal app with a dashboard, an empty state, and one write flow." `
+  --output C:\Users\Alice\Projects\ecd-demo\bundle `
+  --repo-path C:\Users\Alice\Projects\my-app `
+  --project-path C:\Users\Alice\Projects\my-app
 ```
 
 ### `ecl plan` — Render the post-approval code-ready bundle
@@ -96,9 +177,18 @@ python3 scripts/ecl.py pre \
 Reads a completed case JSON (Stage A must be `complete`), renders the full A-J bundle, validates it, and generates the OpenSpec pack. Exits with an error if `code_ready` is not `true`.
 
 ```bash
+# macOS / Linux
 python3 scripts/ecl.py plan \
-  --input-json /abs/path/to/case.json \
-  --output /abs/path/to/bundle \
+  --input-json /home/alice/projects/ecd-demo/case.json \
+  --output /home/alice/projects/ecd-demo/bundle \
+  --force
+```
+
+```powershell
+# Windows (PowerShell)
+python scripts/ecl.py plan `
+  --input-json C:\Users\Alice\Projects\ecd-demo\case.json `
+  --output C:\Users\Alice\Projects\ecd-demo\bundle `
   --force
 ```
 
@@ -107,17 +197,31 @@ python3 scripts/ecl.py plan \
 Validates the bundle, checks that `code_ready=true`, parses the run payload, renders run evidence notes (`00-code-run.md`, `01-verification.md`), and re-validates the bundle.
 
 ```bash
+# macOS / Linux
 python3 scripts/ecl.py code \
-  --case /abs/path/to/bundle \
-  --run-json /abs/path/to/run.json
+  --case /home/alice/projects/ecd-demo/bundle \
+  --run-json /home/alice/projects/ecd-demo/run.json
+```
+
+```powershell
+# Windows (PowerShell)
+python scripts/ecl.py code `
+  --case C:\Users\Alice\Projects\ecd-demo\bundle `
+  --run-json C:\Users\Alice\Projects\ecd-demo\run.json
 ```
 
 ### `ecl achieve` — Render the final acceptance-and-archive verdict
 
-Validates the bundle, reads the latest code run, synthesizes an achieve verdict (achieved / achieved_with_followups / not_achieved), and renders `03-achieve.md`.
+Validates the bundle, reads the latest code run, synthesizes an achieve verdict (`achieved` / `achieved_with_followups` / `not_achieved`), and renders `03-achieve.md`.
 
 ```bash
-python3 scripts/ecl.py achieve --case /abs/path/to/bundle
+# macOS / Linux
+python3 scripts/ecl.py achieve --case /home/alice/projects/ecd-demo/bundle
+```
+
+```powershell
+# Windows (PowerShell)
+python scripts/ecl.py achieve --case C:\Users\Alice\Projects\ecd-demo\bundle
 ```
 
 ### Validation
@@ -125,10 +229,14 @@ python3 scripts/ecl.py achieve --case /abs/path/to/bundle
 Validate any bundle directly:
 
 ```bash
-python3 scripts/validate_ecl_bundle.py /abs/path/to/bundle
+# macOS / Linux
+python3 scripts/validate_ecl_bundle.py /home/alice/projects/ecd-demo/bundle
 ```
 
-> **Note:** On Windows, use `python` instead of `python3` if `python3` is not available.
+```powershell
+# Windows (PowerShell)
+python scripts/validate_ecl_bundle.py C:\Users\Alice\Projects\ecd-demo\bundle
+```
 
 ## Required Claude Code Capabilities
 

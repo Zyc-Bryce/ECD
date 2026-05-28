@@ -36,59 +36,140 @@
 
 ## 安装方式
 
-### Windows (PowerShell)
+选择以下任一方式即可。所有示例以 **Alice** 作为 Windows 用户名、**my-app** 作为项目名——请替换为你自己的。
+
+---
+
+### 方式一：命令行安装
+
+#### Windows (PowerShell)
 
 ```powershell
 # 克隆仓库
-git clone https://github.com/<your-username>/evolutionary-constraint-development.git
+git clone https://github.com/Zyc-Bryce/evolutionary-constraint-development.git
 
-# 安装为用户级技能（全局可用）
+# --- 用户级安装（在所有项目中可用）---
 Copy-Item -Recurse evolutionary-constraint-development $env:USERPROFILE\.claude\skills\
 
-# 或安装为项目级技能（仅在当前项目中可用）
+# --- 项目级安装（仅在当前项目中可用）---
+# 先切换到你的项目根目录，然后执行：
 Copy-Item -Recurse evolutionary-constraint-development .\.claude\skills\
 ```
 
-### macOS / Linux
+#### macOS / Linux
 
 ```bash
 # 克隆仓库
-git clone https://github.com/<your-username>/evolutionary-constraint-development.git
+git clone https://github.com/Zyc-Bryce/evolutionary-constraint-development.git
 
-# 安装为用户级技能（全局可用）
+# 用户级安装（在所有项目中可用）
 cp -r evolutionary-constraint-development ~/.claude/skills/
 
-# 或安装为项目级技能（仅在当前项目中可用）
+# 项目级安装（仅在当前项目中可用）
 cp -r evolutionary-constraint-development /path/to/your-project/.claude/skills/
 ```
 
-### 直接克隆安装（所有平台）
+#### 直接克隆到 skills 目录（所有平台）
 
 ```bash
-# 直接克隆到用户级 skills 目录
 # Windows (PowerShell):
-git clone https://github.com/<your-username>/evolutionary-constraint-development.git $env:USERPROFILE\.claude\skills\evolutionary-constraint-development
+git clone https://github.com/Zyc-Bryce/evolutionary-constraint-development.git $env:USERPROFILE\.claude\skills\evolutionary-constraint-development
 
 # macOS / Linux:
-git clone https://github.com/<your-username>/evolutionary-constraint-development.git ~/.claude/skills/evolutionary-constraint-development
+git clone https://github.com/Zyc-Bryce/evolutionary-constraint-development.git ~/.claude/skills/evolutionary-constraint-development
 ```
 
-安装后，Claude Code 会在对应目录下自动发现并加载该技能。
+安装后，下次在对应目录中启动 Claude Code 时，技能就会被自动发现并加载。
+
+---
+
+### 方式二：手动安装（无需终端）
+
+如果你不想使用命令行，可以按以下步骤手动操作。
+
+#### 第 1 步 — 下载
+
+访问 https://github.com/Zyc-Bryce/evolutionary-constraint-development ，点击 **Code → Download ZIP** 下载压缩包，然后解压到你选择的目录。
+
+**示例：** 解压到 `C:\Users\Alice\Downloads\evolutionary-constraint-development`。
+
+#### 第 2 步 — 选择安装范围
+
+从下面两个选项中**任选其一**。
+
+---
+
+**选项 A：用户级安装（技能在所有项目中都可用）**
+
+1. 打开文件资源管理器，在地址栏输入 `%USERPROFILE%\.claude\skills\` 并回车。
+
+   *以 Alice 为例，完整路径为：* `C:\Users\Alice\.claude\skills\`
+
+2. 如果 `skills` 文件夹不存在，新建它：
+   - 右键 → **新建 → 文件夹**，命名为 `skills`。
+
+3. 将第 1 步解压得到的 `evolutionary-constraint-development` 文件夹，复制（或移动）到 `skills\` 中。
+
+   *复制完成后，路径应类似：* `C:\Users\Alice\.claude\skills\evolutionary-constraint-development\SKILL.md`
+
+---
+
+**选项 B：项目级安装（技能仅在当前项目中可用）**
+
+1. 打开文件资源管理器，导航到你的项目根目录。
+
+   *例如：* `C:\Users\Alice\Projects\my-app`
+
+2. 在项目目录中，查看是否存在 `.claude` 文件夹。如果不存在，新建它：
+   - 右键 → **新建 → 文件夹**，命名为 `.claude`
+   - *Windows 可能会提示"必须键入文件名"——正常现象，确认即可。*
+
+3. 在 `.claude` 文件夹内，查看是否存在 `skills` 文件夹。如果不存在，新建 `skills`。
+
+4. 将第 1 步解压得到的 `evolutionary-constraint-development` 文件夹，复制（或移动）到 `.claude\skills\` 中。
+
+   *复制完成后，路径应类似：* `C:\Users\Alice\Projects\my-app\.claude\skills\evolutionary-constraint-development\SKILL.md`
+
+---
+
+无论选择哪个选项，重启 Claude Code（或在对应项目目录中启动），技能就会被自动发现。
+
+---
+
+### 方式三：手动安装（macOS / Linux，无需终端）
+
+1. 访问 https://github.com/Zyc-Bryce/evolutionary-constraint-development ，点击 **Code → Download ZIP**。
+2. 将 ZIP 解压到某个目录（例如 `~/Downloads/evolutionary-constraint-development`）。
+3. 打开 Finder（macOS）或文件管理器（Linux），启用"显示隐藏文件"以便看到 `.claude` 文件夹。
+4. **用户级安装：** 将解压后的文件夹复制到 `~/.claude/skills/`。如果 `~/.claude/` 下没有 `skills/`，先创建它。
+5. **项目级安装：** 将解压后的文件夹复制到 `<你的项目>/.claude/skills/`。
 
 ## CLI 快速开始
 
 CLI 本身是薄工具层，负责渲染、校验和记录。真正的推理行为仍由遵循这个 Skill 的模型承担。
+
+> **平台提示：** macOS/Linux 使用 `python3`，Windows 使用 `python`。以下路径以用户 **Alice**、项目 **my-app** 为例——请替换为你自己的路径。
 
 ### `ecl pre` — 初始化 Stage A 审批工作区
 
 从原始请求创建 normalized case JSON scaffold，渲染 Obsidian bundle 并校验。这将启动高交互的澄清阶段（Stage A）。
 
 ```bash
+# macOS / Linux
 python3 scripts/ecl.py pre \
   --request "Build a minimal app with a dashboard, an empty state, and one write flow." \
-  --output /abs/path/to/bundle \
-  --repo-path /abs/path/to/repo \
-  --project-path /abs/path/to/repo
+  --output /home/alice/projects/ecd-demo/bundle \
+  --repo-path /home/alice/projects/my-app \
+  --project-path /home/alice/projects/my-app
+```
+
+```powershell
+# Windows (PowerShell)
+python scripts/ecl.py pre `
+  --request "Build a minimal app with a dashboard, an empty state, and one write flow." `
+  --output C:\Users\Alice\Projects\ecd-demo\bundle `
+  --repo-path C:\Users\Alice\Projects\my-app `
+  --project-path C:\Users\Alice\Projects\my-app
 ```
 
 ### `ecl plan` — 渲染审批后的 code-ready bundle
@@ -96,9 +177,18 @@ python3 scripts/ecl.py pre \
 读取已完成的 case JSON（Stage A 必须为 `complete`），渲染完整的 A-J bundle，校验并生成 OpenSpec pack。如果 `code_ready` 不为 `true` 则报错退出。
 
 ```bash
+# macOS / Linux
 python3 scripts/ecl.py plan \
-  --input-json /abs/path/to/case.json \
-  --output /abs/path/to/bundle \
+  --input-json /home/alice/projects/ecd-demo/case.json \
+  --output /home/alice/projects/ecd-demo/bundle \
+  --force
+```
+
+```powershell
+# Windows (PowerShell)
+python scripts/ecl.py plan `
+  --input-json C:\Users\Alice\Projects\ecd-demo\case.json `
+  --output C:\Users\Alice\Projects\ecd-demo\bundle `
   --force
 ```
 
@@ -107,17 +197,31 @@ python3 scripts/ecl.py plan \
 校验 bundle，检查 `code_ready=true`，解析运行 payload，渲染运行证据笔记（`00-code-run.md`、`01-verification.md`）并重新校验。
 
 ```bash
+# macOS / Linux
 python3 scripts/ecl.py code \
-  --case /abs/path/to/bundle \
-  --run-json /abs/path/to/run.json
+  --case /home/alice/projects/ecd-demo/bundle \
+  --run-json /home/alice/projects/ecd-demo/run.json
+```
+
+```powershell
+# Windows (PowerShell)
+python scripts/ecl.py code `
+  --case C:\Users\Alice\Projects\ecd-demo\bundle `
+  --run-json C:\Users\Alice\Projects\ecd-demo\run.json
 ```
 
 ### `ecl achieve` — 渲染最终验收与归档判定
 
-校验 bundle，读取最近一次 code run，综合生成 achieve 判定（achieved / achieved_with_followups / not_achieved），渲染 `03-achieve.md`。
+校验 bundle，读取最近一次 code run，综合生成 achieve 判定（`achieved` / `achieved_with_followups` / `not_achieved`），渲染 `03-achieve.md`。
 
 ```bash
-python3 scripts/ecl.py achieve --case /abs/path/to/bundle
+# macOS / Linux
+python3 scripts/ecl.py achieve --case /home/alice/projects/ecd-demo/bundle
+```
+
+```powershell
+# Windows (PowerShell)
+python scripts/ecl.py achieve --case C:\Users\Alice\Projects\ecd-demo\bundle
 ```
 
 ### 直接校验
@@ -125,10 +229,14 @@ python3 scripts/ecl.py achieve --case /abs/path/to/bundle
 直接校验任意 bundle：
 
 ```bash
-python3 scripts/validate_ecl_bundle.py /abs/path/to/bundle
+# macOS / Linux
+python3 scripts/validate_ecl_bundle.py /home/alice/projects/ecd-demo/bundle
 ```
 
-> **注意：** 在 Windows 上如果 `python3` 不可用，请使用 `python`。
+```powershell
+# Windows (PowerShell)
+python scripts/validate_ecl_bundle.py C:\Users\Alice\Projects\ecd-demo\bundle
+```
 
 ## Claude Code 侧的必要能力
 
