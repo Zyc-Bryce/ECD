@@ -15,7 +15,7 @@ Raw request → frozen meaning → code-ready handoff → run evidence → achie
 
 </div>
 
-`evolutionary-constraint-development` is a Claude Code skill for turning a raw request into a constrained delivery loop:
+`ecd` (Evolutionary Constraint Development) is a Claude Code skill for turning a raw request into a constrained delivery loop. Invoke it with `/ecd` in Claude Code.
 
 1. `pre` interrogates the request until meaning is frozen enough to approve.
 2. `plan` converges the retained path into a code-ready bundle.

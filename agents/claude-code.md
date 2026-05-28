@@ -8,7 +8,7 @@ Claude Code 使用 `Agent` 工具启动子 Agent。每个强制阶段需要特�
 interface:
   display_name: "Evolutionary Constraint Development"
   short_description: "Strict ECD pre/plan/code/achieve delivery loop"
-  default_prompt: "Use evolutionary-constraint-development to turn a raw product or engineering request into a Stage A approval workspace, then a frozen code-ready handoff, execute only from that handoff, and verify the delivered result with the strict pre/plan/code/achieve contract."
+  default_prompt: "Use ecd (Evolutionary Constraint Development) to turn a raw product or engineering request into a Stage A approval workspace, then a frozen code-ready handoff, execute only from that handoff, and verify the delivered result with the strict pre/plan/code/achieve contract."
 ```
 
 ## 强制子 Agent 阶段

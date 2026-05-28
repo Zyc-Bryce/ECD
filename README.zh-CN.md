@@ -15,7 +15,7 @@
 
 </div>
 
-`evolutionary-constraint-development` 是一套 Claude Code Skill，用来把一条原始需求压成一个有约束的交付闭环：
+`ecd`（Evolutionary Constraint Development，演进约束开发）是一套 Claude Code Skill。在 Claude Code 中输入 `/ecd` 即可调用。
 
 1. `pre` — 追问和整理，直到需求语义足够冻结，可以进入审批门。
 2. `plan` — 让保留下来的路径收敛成一个 code-ready bundle。

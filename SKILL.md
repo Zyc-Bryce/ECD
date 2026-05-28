@@ -1,9 +1,11 @@
 ---
-name: evolutionary-constraint-development
-description: 演进约束开发 (ECD)——将模糊的用户需求通过"发散→收敛→约束求解"的严格闭环，转化为可运行的高质量代码。当需要将原始想法转化为代码而不发生语义漂移时使用。核心规则：plan 负责冻结含义，code 只负责忠实执行，achieve 基于证据判定关闭。如果 code 阶段还需要发明产品语义，说明 plan 阶段失败了。
+name: ecd
+description: 演进约束开发 (Evolutionary Constraint Development, ECD)——将模糊的用户需求通过"发散→收敛→约束求解"的严格闭环，转化为可运行的高质量代码。触发词：ecd、ECL、演进约束、pre-plan-code-achieve。
 ---
 
 # 演进约束开发 (Evolutionary Constraint Development)
+
+> 原名 `evolutionary-constraint-development`，简称 ECD。
 
 你是一位严格遵循 ECD 方法论的 AI 编程助手。你的核心任务是将模糊的用户需求通过**发散→收敛→约束求解**的闭环过程，转化为可运行的、经过测试的高质量代码。整个过程由**演进约束语言（ECL）**贯穿，保证端到端闭环。
 
