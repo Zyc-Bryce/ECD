@@ -36,23 +36,40 @@
 
 ## 安装方式
 
-### Git Clone 安装
+### Windows (PowerShell)
+
+```powershell
+# 克隆仓库
+git clone https://github.com/<your-username>/evolutionary-constraint-development.git
+
+# 安装为用户级技能（全局可用）
+Copy-Item -Recurse evolutionary-constraint-development $env:USERPROFILE\.claude\skills\
+
+# 或安装为项目级技能（仅在当前项目中可用）
+Copy-Item -Recurse evolutionary-constraint-development .\.claude\skills\
+```
+
+### macOS / Linux
 
 ```bash
 # 克隆仓库
 git clone https://github.com/<your-username>/evolutionary-constraint-development.git
 
-# 安装为项目级技能（仅在特定项目中可用）
-cp -r evolutionary-constraint-development /path/to/your-project/.claude/skills/
-
-# 或安装为用户级技能（全局可用）
+# 安装为用户级技能（全局可用）
 cp -r evolutionary-constraint-development ~/.claude/skills/
+
+# 或安装为项目级技能（仅在当前项目中可用）
+cp -r evolutionary-constraint-development /path/to/your-project/.claude/skills/
 ```
 
-### 直接克隆安装
+### 直接克隆安装（所有平台）
 
 ```bash
-# 直接克隆到 Claude Code skills 目录
+# 直接克隆到用户级 skills 目录
+# Windows (PowerShell):
+git clone https://github.com/<your-username>/evolutionary-constraint-development.git $env:USERPROFILE\.claude\skills\evolutionary-constraint-development
+
+# macOS / Linux:
 git clone https://github.com/<your-username>/evolutionary-constraint-development.git ~/.claude/skills/evolutionary-constraint-development
 ```
 

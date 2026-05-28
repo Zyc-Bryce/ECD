@@ -28,7 +28,7 @@ FENCE_RE = re.compile(r"```([^\n`]*)\n(.*?)\n```", re.DOTALL)
 
 def run_python(script: Path, argv: list[str]) -> int:
     env = dict(os.environ)
-    env.setdefault("PYTHONPYCACHEPREFIX", "/tmp")
+    env.setdefault("PYTHONPYCACHEPREFIX", str(Path(tempfile.gettempdir()) / "ecl-pycache"))
     completed = subprocess.run([sys.executable, str(script), *argv], env=env)
     return int(completed.returncode)
 

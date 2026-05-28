@@ -36,23 +36,40 @@ The core idea is simple: planning owns meaning, coding owns execution, and closu
 
 ## Installation
 
-### Via Git Clone
+### Windows (PowerShell)
+
+```powershell
+# Clone the repository
+git clone https://github.com/<your-username>/evolutionary-constraint-development.git
+
+# Install as a user-level skill (globally available)
+Copy-Item -Recurse evolutionary-constraint-development $env:USERPROFILE\.claude\skills\
+
+# Or install as a project-level skill (only in current project)
+Copy-Item -Recurse evolutionary-constraint-development .\.claude\skills\
+```
+
+### macOS / Linux
 
 ```bash
 # Clone the repository
 git clone https://github.com/<your-username>/evolutionary-constraint-development.git
 
-# Install as a project-level skill (available only in that project)
-cp -r evolutionary-constraint-development /path/to/your-project/.claude/skills/
-
-# Or install as a user-level skill (available globally)
+# Install as a user-level skill (globally available)
 cp -r evolutionary-constraint-development ~/.claude/skills/
+
+# Or install as a project-level skill (only in current project)
+cp -r evolutionary-constraint-development /path/to/your-project/.claude/skills/
 ```
 
-### Via Direct Clone
+### Direct Clone (all platforms)
 
 ```bash
-# Clone directly into the Claude Code skills directory
+# Clone directly into the user-level skills directory
+# Windows (PowerShell):
+git clone https://github.com/<your-username>/evolutionary-constraint-development.git $env:USERPROFILE\.claude\skills\evolutionary-constraint-development
+
+# macOS / Linux:
 git clone https://github.com/<your-username>/evolutionary-constraint-development.git ~/.claude/skills/evolutionary-constraint-development
 ```
 
