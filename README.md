@@ -47,17 +47,13 @@ Choose one of the methods below.
 npx @zyc-bryce/ecd
 ```
 
-Auto-configures Claude Code. Restart and you're done. No manual file editing.
+Auto-configures Claude Code (adds marketplace + enables plugin). Restart and you're done. No manual file editing.
 
-> 🟡 Requires npm publishing first. Until then, use Method 2.
+> 💡 This command only edits `settings.json` — functionally equivalent to Method 2's manual configuration below.
 
 ---
 
 ### Method 2: /plugin Install (⭐ Recommended)
-
----
-
-### Method 1: Plugin Install (⭐ Recommended)
 
 Add a few lines to your Claude Code config — auto-download, auto-update, no manual file management.
 
@@ -97,10 +93,12 @@ Add these entries to `settings.json`:
 Close and reopen Claude Code. Type `/ecd` to verify — if you see the ECD prompt, you're all set.
 
 > ✅ **Advantage**: Claude Code will automatically detect new versions. No manual file management needed.
+>
+> 🔧 **Troubleshooting**: If `/ecd` doesn't appear after restart, run `claude plugin list` in terminal to check the ECD plugin status. If it shows `failed to load` with "conflicting manifests" error, the `marketplace.json` and `plugin.json` have duplicate component declarations — update to the latest version or check [GitHub Issues](https://github.com/Zyc-Bryce/ECD/issues).
 
 ---
 
-### Method 2: Command-Line Install
+### Method 3: Command-Line Install
 
 #### Windows (PowerShell)
 
@@ -143,7 +141,7 @@ After installation, the skill is automatically discovered the next time you star
 
 ---
 
-### Method 3: Manual Install (No Terminal Required)
+### Method 4: Manual Install (No Terminal Required)
 
 If you prefer to avoid the command line, follow these steps.
 
@@ -155,7 +153,7 @@ Visit https://github.com/Zyc-Bryce/ECD and click **Code → Download ZIP**. Extr
 
 #### Step 2 — Choose install scope
 
-Pick **one** of the two options below.
+Pick **one** of the two options below. *(The following steps are for Windows. macOS/Linux users: see the dedicated section below.)*
 
 ---
 
@@ -196,7 +194,7 @@ After either option, restart Claude Code (or start it in the relevant project di
 
 ---
 
-### Method 3: Manual Install (macOS / Linux, No Terminal)
+#### macOS / Linux Users
 
 1. Visit https://github.com/Zyc-Bryce/ECD and click **Code → Download ZIP**.
 2. Extract the ZIP to a folder (e.g., `~/Downloads/evolutionary-constraint-development`).

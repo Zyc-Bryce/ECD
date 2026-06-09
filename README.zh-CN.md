@@ -50,9 +50,9 @@
 npx @zyc-bryce/ecd
 ```
 
-自动配置 Claude Code，重启即可使用。无需手动编辑任何文件。
+自动配置 Claude Code（添加市场源 + 启用插件），重启即可使用。无需手动编辑任何文件。
 
-> 🟡 需要先发布到 npm。在此之前，请使用方式二。
+> 💡 此命令仅编辑 `settings.json`，效果等同于下方方式二的手动配置。
 
 ---
 
@@ -96,6 +96,8 @@ npx @zyc-bryce/ecd
 关闭并重新打开 Claude Code。输入 `/ecd` 验证——如果看到 ECD 提示信息，安装成功。
 
 > ✅ **优势**：后续 ECD 发新版本时，Claude Code 会自动检测更新。你也无需手动管理文件。
+>
+> 🔧 **故障排查**：如果重启后 `/ecd` 没出现，在终端运行 `claude plugin list` 检查 ECD 插件状态。若显示 `failed to load` 及 "conflicting manifests" 错误，说明 `marketplace.json` 与 `plugin.json` 存在重复声明——请更新到最新版或参考 [GitHub Issues](https://github.com/Zyc-Bryce/ECD/issues)。
 
 ---
 
@@ -144,7 +146,7 @@ git clone https://github.com/Zyc-Bryce/ECD.git ~/.claude/skills/evolutionary-con
 
 ---
 
-### 方式四：手动安装（无需终端）
+### 方式四：手动安装（无需终端，跨平台）
 
 如果你不想使用命令行，可以按以下步骤手动操作。
 
@@ -156,9 +158,9 @@ git clone https://github.com/Zyc-Bryce/ECD.git ~/.claude/skills/evolutionary-con
 
 #### 第 2 步 — 选择安装范围
 
-从下面两个选项中**任选其一**。
+从下面两个选项中**任选其一**。（以下为 Windows 操作步骤，macOS/Linux 用户请参考下方独立小节。）
 
----
+##### Windows 用户
 
 **选项 A：用户级安装（技能在所有项目中都可用）**
 
@@ -197,7 +199,7 @@ git clone https://github.com/Zyc-Bryce/ECD.git ~/.claude/skills/evolutionary-con
 
 ---
 
-### 方式四：手动安装（macOS / Linux，无需终端）
+#### macOS / Linux 用户
 
 1. 访问 https://github.com/Zyc-Bryce/ECD ，点击 **Code → Download ZIP**。
 2. 将 ZIP 解压到某个目录（例如 `~/Downloads/evolutionary-constraint-development`）。
