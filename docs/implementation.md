@@ -16,6 +16,38 @@ evolution-constraint-planner/
   tests/
 ```
 
+## Tier Architecture `[v1.1]`
+
+ECD v1.1 introduces a 3-tier complexity routing system. The classifier runs before any stage executes.
+
+### Classifier
+
+Three silent questions determine the tier:
+
+1. **Q1 Code impact surface:** ≤3 files=L1, 4-10=L2, >10=L3
+2. **Q2 Security/correctness risk:** UI-only=L1, functional=L2, data/auth/payment=L3
+3. **Q3 Requirement clarity:** Ambiguous → force L3
+
+`Final tier = max(Q1, Q2, Q3)`. Missing tier in existing bundles defaults to L3 (Full).
+
+### Bundle Layout by Tier
+
+| Tier | Artifacts |
+|------|-----------|
+| **L1 Lite** | `00-overview.md`, `05-constraint-ledger.md` (lite), `10-a-preprocess.md` (lite), `90-code-handoff.md` (lite), `97-code-preflight.md`, `Runs/` |
+| **L2 Standard** | L1 files (non-lite templates) + `20-b-divergence.md`, `30-c-requirements.md`, `50-e-closure.md`, optionally `40-d-critique.md`, `80-h-review.md` |
+| **L3 Full** | All 17 files as in v1.0 (unchanged) |
+
+### code_ready Gating by Tier
+
+- **L1:** Handoff freezes 4 surfaces (repo_grounding, frozen_product_decisions, file_plan, implementation_units). Companion docs skipped.
+- **L2:** Handoff freezes all required surfaces. Companion docs optional (91/92/95/96).
+- **L3:** Full handoff quality bar with all companion docs (unchanged from v1.0).
+
+### Validator Tier Awareness
+
+The validator (`validate_ecl_bundle.py`) currently checks all 17 files for L3. For L1/L2 bundles, only tier-appropriate files are required. This is noted for a future script update.
+
 ## Runtime Model
 
 ECL has two layers:

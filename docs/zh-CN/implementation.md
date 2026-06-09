@@ -15,6 +15,38 @@ evolutionary-constraint-development/
   docs/                 # 技术文档（中英双语）
 ```
 
+## 等级架构 `[v1.1]`
+
+ECD v1.1 引入了三级复杂度路由系统。分类器在任何阶段执行之前运行。
+
+### 分类器
+
+三个静默问题决定等级：
+
+1. **Q1 代码影响面：** ≤3文件=L1, 4-10=L2, >10=L3
+2. **Q2 安全/正确性风险：** 仅UI=L1, 功能逻辑=L2, 数据/认证/支付=L3
+3. **Q3 需求清晰度：** 模糊 → 强制L3
+
+`最终等级 = max(Q1, Q2, Q3)`。已有 bundle 中缺失 tier 字段默认视为 L3（Full）。
+
+### 各级 Bundle 布局
+
+| 等级 | 产物文件 |
+|------|---------|
+| **L1 Lite** | `00-overview.md`, `05-constraint-ledger.md` (lite), `10-a-preprocess.md` (lite), `90-code-handoff.md` (lite), `97-code-preflight.md`, `Runs/` |
+| **L2 Standard** | L1 文件（非lite模板） + `20-b-divergence.md`, `30-c-requirements.md`, `50-e-closure.md`，可选 `40-d-critique.md`, `80-h-review.md` |
+| **L3 Full** | 全部 17 个文件（与 v1.0 相同，不变） |
+
+### code_ready 门控分级
+
+- **L1：** 交接包冻结 4 个面（repo_grounding, frozen_product_decisions, file_plan, implementation_units）。跳过伴侣文档。
+- **L2：** 交接包冻结全部必需面。伴侣文档可选（91/92/95/96）。
+- **L3：** 完整交接质量门槛加全部伴侣文档（与 v1.0 相同）。
+
+### 校验器的等级感知
+
+`validate_ecl_bundle.py` 当前对 L3 检查全部 17 个文件。对 L1/L2 bundle 仅检查等级对应的文件。此项留待后续脚本更新。
+
 ## 运行模型
 
 ECD 有两层：

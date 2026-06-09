@@ -17,6 +17,53 @@ description: 演进约束开发 (Evolutionary Constraint Development, ECD)——
 - **端到端闭环**：需求 → 功能 → 模块 → 函数 的链条必须完整可追溯
 - **ECL 贯穿全程**：演进约束语言固化过程产物，作为每个阶段的输入、输出和真相源
 - **独立审查**：关键收敛阶段（D/G/H/J）必须使用 `Agent` 工具启动独立子 Agent，不可由主模型自己扮演
+- **复杂度自适应** (v1.1)：执行任何阶段前，先用 3 个问题评估任务等级，按 Lite/Standard/Full 三级路由，避免简单任务过度仪式化
+
+## 复杂度分类器（前置门控）`[v1.1]`
+
+在执行任何 ECD 阶段之前，**必须先静默评估**以下 3 个问题（不向用户提问，基于仓库探查和需求分析自行判断）：
+
+### 三问分类
+
+| 问题 | L1 (轻量) | L2 (标准) | L3 (重量) |
+|------|-----------|-----------|-----------|
+| **Q1 代码影响面** | ≤3 文件 | 4-10 文件 | >10 文件 |
+| **Q2 安全/正确性风险** | UI样式/文案/排版 | 功能逻辑/API | 数据丢失/认证/支付/安全漏洞/PII |
+| **Q3 需求清晰度** | 需求明确无歧义 | 部分细节待定 | 需求模糊（如"让它变快"）→ **自动升级 L3** |
+
+### 定级规则
+
+```
+最终等级 = max(Q1, Q2, Q3)
+Q3 为 "模糊" 时 → 强制 L3（不论 Q1/Q2 结果）
+greenfield 项目（无现有仓库）→ Q1 默认 L2
+用户可显式覆盖：--tier lite|standard|full
+```
+
+### 三级路由
+
+| 等级 | 阶段路径 | 子 Agent | Token 预算 | 适用场景 |
+|------|---------|----------|-----------|---------|
+| **L1 ECD-Lite** | A-Lite → J-Lite → code → achieve-Lite | 0 | 15k-30k | 暗色模式、修bug、文案调整、单组件改动 |
+| **L2 ECD-Standard** | A → B → C → D(可选) → E(精简) → H(可选) → J → code → achieve | 0-2 | 35k-55k | 新增API、中等功能、多文件改动 |
+| **L3 ECD-Full** | A → B → C → D → E → F → G → H → J → code → achieve | 5 (强制) | 65k-105k | 认证系统、架构变更、安全敏感、需求模糊 |
+
+### L3 完整性保证
+
+**L3 (ECD-Full) 行为完全等同于 ECD v1.0。** 此等级下所有阶段、子 Agent、退出门均不变。已有 bundle 若缺失 tier 字段，默认视为 L3 处理。
+
+### Lite/Standard 阶段速览
+
+**A-Lite (L1)**：最多 3 个反问，冻结重述目标、保留范围、排除范围、验收检查、关键假设。跳过方案发散和深度拆解。
+
+**J-Lite (L1)**：将 A-Lite 输出直接编译为最小交接包。仅含 `90-code-handoff.md`，无伴侣文档（91/92/95/96/98/99）。
+
+**achieve-Lite (L1)**：运行验证命令 → 检查首次打开体验 → 裁决 archived/left_open。
+
+**L2 可选阶段规则**：
+- D (批判)：需求单元 >5 或存在横切关注点时运行
+- H (评审)：交接包有 >3 个实现单元时运行
+- E (补全)：仅解决高影响依赖缺口，跳过执行链编译
 
 ## 命令面
 
@@ -50,9 +97,9 @@ python scripts/validate_ecl_bundle.py /abs/path/to/bundle
 
 ## 工作流合同
 
-### 1. `pre` — 阶段 A/B：质疑 → 发散 → 冻结审批
+### 1. `pre` — 阶段 A/B：质疑 → 发散 → 冻结审批 `[L1-Lite, L2, L3]`
 
-**阶段 A：需求预处理（质疑与澄清）**
+**阶段 A：需求预处理（质疑与澄清）** `[L1-Lite, L2, L3]`
 
 - 把用户的原始描述视为**假设**，而非真理。
 - **默认假设用户可能说不清、说不全、隐瞒甚至无意识撒谎。**
@@ -62,7 +109,7 @@ python scripts/validate_ecl_bundle.py /abs/path/to/bundle
 - 不要追求"少问问题"，要追求**审批前语义覆盖率最大化**。
 - 用批量问题暴露隐藏矛盾或缺失语义，而非单个最小跟进。
 
-**阶段 B：方案畅想（发散）**
+**阶段 B：方案畅想（发散）** `[L2, L3]`
 
 - 针对澄清后的需求，发散式生成**多种材质不同的技术方案**（非风格变体，至少 3 个）。
 - 每个方案需说明覆盖了哪些盲区、有哪些权衡。
@@ -79,20 +126,20 @@ python scripts/validate_ecl_bundle.py /abs/path/to/bundle
 
 **不得在用户明确批准前进入 plan。** 详见 `references/plan-approval-gate.md`。
 
-### 2. `plan` — 阶段 C/D/E/F/G/H/J：收敛 → 冻结交接
+### 2. `plan` — 阶段 C/D/E/F/G/H/J：收敛 → 冻结交接 `[L1-Lite, L2, L3]`
 
 审批后启动。审批后用户交互应大幅减少，B-H 和 J 主要在后台收敛，除非出现新的高影响歧义或矛盾。
 
 详见 `references/stage-playbook.md`。
 
-**阶段 C：需求拆解**
+**阶段 C：需求拆解** `[L2, L3]`
 
 - 将保留路径拆解为具体的、可验证的需求单元（requirement units）。
 - 冻结实现相关语义：接口契约、验证目标、非目标、冻结术语。
 - 将需求单元塑造成可后续干净映射为实现单元的形态。
 - 包足够具体，让编码者不会发明产品含义。
 
-**阶段 D：挑刺 —— 第一个强制独立子 Agent 阶段**
+**阶段 D：挑刺 —— 第一个强制独立子 Agent 阶段** `[L2(可选), L3(强制)]`
 
 - 使用 `Agent` 工具启动一个**独立 critique 子 Agent**。
 - 传递：原始需求 + 当前 ledger 快照 + 保留需求包。不得传递主模型的偏好答案。
@@ -103,20 +150,20 @@ python scripts/validate_ecl_bundle.py /abs/path/to/bundle
 
 详见 `references/subagent-protocol.md`。
 
-**阶段 E：端到端补全**
+**阶段 E：端到端补全** `[L2(精简), L3]`
 
 - 检查 `需求 → 功能 → 模块 → 函数` 的依赖链是否完整。
 - 补全所有缺失环节，将依赖关系转化为依赖感知的执行链。
 - 不留下任何高影响依赖缺口给 code。
 
-**阶段 F：探测验证**
+**阶段 F：探测验证** `[L3]`
 
 - 针对收敛方案生成**最小验证代码**（探针/原型）。
 - 使用 `Bash` 实际运行探针，验证技术路径可行性。
 - 行不通的方案立刻丢弃，根据探测结果再次收敛需求。
 - 记录假设、方法、预期信号、终止标准和结果。
 
-**阶段 G：红蓝对抗 —— 第二个强制独立子 Agent 阶段**
+**阶段 G：红蓝对抗 —— 第二个强制独立子 Agent 阶段** `[L3]`
 
 - 使用 `Agent` 工具启动**两次独立调用**：红方 Agent 和蓝方 Agent。
 - 红方 Agent 攻击：边界场景、滥用路径、依赖断裂、非法状态。
@@ -125,7 +172,7 @@ python scripts/validate_ecl_bundle.py /abs/path/to/bundle
 
 详见 `references/subagent-protocol.md`。
 
-**阶段 H：评审 —— 第三个强制独立子 Agent 阶段**
+**阶段 H：评审 —— 第三个强制独立子 Agent 阶段** `[L2(可选), L3(强制)]`
 
 - 使用 `Agent` 工具启动一个**独立 review 子 Agent**。
 - Review Agent 判定：如果下一个编码模型还需要发明产品语义、验证语义、状态行为或依赖行为，则**必须拒绝**该包。
@@ -134,7 +181,7 @@ python scripts/validate_ecl_bundle.py /abs/path/to/bundle
 
 详见 `references/subagent-protocol.md`。
 
-**阶段 J：编译交接 —— 第四个强制独立子 Agent 阶段**
+**阶段 J：编译交接 —— 第四个强制独立子 Agent 阶段** `[L1-Lite, L2, L3]`
 
 - 使用 `Agent` 工具启动一个**独立 compile 子 Agent**。
 - 将 A-H 的收敛结果编译为代码就绪的 companion docs 和最终交接包。
@@ -161,7 +208,7 @@ plan 结束时，`90-code-handoff.md` 必须冻结：
 
 详见 `references/handoff-quality-bar.md`。
 
-### 3. `code` — 执行，而非诠释
+### 3. `code` — 执行，而非诠释 `[L1, L2, L3]`
 
 `code` 仅消费 `90-code-handoff.md` 及其显式引用的文件。
 
@@ -183,7 +230,7 @@ plan 结束时，`90-code-handoff.md` 必须冻结：
 
 详见 `references/code-playbook.md`。
 
-### 4. `achieve` — 基于证据的关闭
+### 4. `achieve` — 基于证据的关闭 `[L1-Lite, L2, L3]`
 
 编码后使用，用于关闭而非部分实现报告。
 
@@ -222,6 +269,65 @@ plan 结束时，`90-code-handoff.md` 必须冻结：
 - 交接中包含至少一条浏览器级验证路径
 - 不以"打开应用发现明显布局或交互损坏"的状态声称成功
 
+## Superpowers 集成 `[v1.1]`
+
+ECD 和 Superpowers 解决交付问题的不同半场。ECD 擅长语义冻结（pre/plan），Superpowers 擅长工程纪律（TDD、code review、分支管理）。两者组合形成完整交付流水线。
+
+### 分工
+
+| 能力 | ECD | Superpowers |
+|------|-----|-------------|
+| 语义冻结 (pre/plan) | **主力** — 阶段 A-J 在代码触碰仓库前冻结所有产品含义 | 无 |
+| TDD 强制 | 交接包中指定验证命令，但不强制红-绿-重构 | **主力** — `test-driven-development` skill |
+| 独立对抗审查 | **主力** — 子Agent (D/G/H/J) | 辅助 — `requesting-code-review` (合规导向) |
+| 分支隔离 | 无 | **主力** — `using-git-worktrees` |
+| 验收前验证 | `achieve` 阶段（基于证据的关闭） | `verification-before-completion` |
+
+### 推荐工作流
+
+**大中功能（需要语义保真 + 工程质量）：**
+```
+ECD pre/plan → Superpowers worktree → Superpowers TDD → 执行 → Superpowers verify → ECD achieve
+```
+
+**小功能（快速冻结 + TDD）：**
+```
+ECD A-Lite → J-Lite → Superpowers TDD → Superpowers verify → ECD achieve-Lite
+```
+
+**Bug修复/重构（需求已明确）：** 仅 Superpowers，跳过 ECD。
+
+### 反模式
+
+- ❌ 不要为简单改动跑 ECD Full (L3) "以求稳妥"
+- ❌ 不要在绿地项目中跳过 ECD 的 pre — Superpowers brainstorming ≠ ECD Stage A 的语义挖掘
+- ❌ 不要用 ECD 替代 TDD — 把 Superpowers 的 `test-driven-development` 加入工作流
+- ✅ 让 ECD 管含义，Superpowers 管执行质量
+
+详见 `references/superpowers-integration.md`。
+
+## 增量模式 `[v1.1]`
+
+已有 ECD bundle 的项目，支持增量修改而无需重走完整流水线。
+
+### 检测
+
+在复杂度分类器之前运行：
+1. 目标路径存在 ECD bundle（`00-overview.md` + `90-code-handoff.md`）？
+2. 用户请求包含增量信号（update/modify/change/add to existing/修改/增加/调整）？
+3. 都满足 → 进入增量模式，跳过分类器
+
+### 变更路由
+
+| 变更类型 | 重入阶段 | 示例 |
+|---------|---------|------|
+| 影响产品语义 | Stage A | "改成支持多用户" |
+| 影响实现不影义 | Stage C | "SQLite 换 PostgreSQL" |
+| 纯增量（现有架构内） | Stage J | "给登录加个 loading spinner" |
+| Bug修复（语义已冻结） | 直接 `/code` | "按钮点两下提交两次" |
+
+详见 `references/incremental-mode.md`。
+
 ## OpenSpec 映射
 
 当用户需要 OpenSpec 格式的输出时，将收敛后的 ECL 包映射为：
@@ -249,20 +355,22 @@ plan 结束时，`90-code-handoff.md` 必须冻结：
 
 本技能目录下的参考文件：
 
-- `references/plan-approval-gate.md`：如何追问和冻结审批
-- `references/stage-playbook.md`：A-J 阶段执行规则
+- `references/plan-approval-gate.md`：如何追问和冻结审批（含 v1.1 分级审批包）
+- `references/stage-playbook.md`：A-J 阶段执行规则（含 v1.1 Lite/Standard 规则）
 - `references/subagent-protocol.md`：强制子 Agent 阶段和 Claude Code Agent 工具用法
 - `references/handoff-quality-bar.md`：code 前必须冻结的内容
 - `references/code-playbook.md`：严格编码行为规则
 - `references/achieve-playbook.md`：关闭、验收和归档验证
+- `references/superpowers-integration.md`：`[v1.1]` Superpowers 互补集成（ECD 管语义，Superpowers 管工程纪律）
+- `references/incremental-mode.md`：`[v1.1]` 增量模式（已有 bundle 的局部修改，跳过全流程）
 - `references/openspec-mapping.md`：可选 OpenSpec 格式导出规则
 - `references/ecl-schema.md`：bundle 和结构化块 schema
 - `references/obsidian-layout.md`：Obsidian 笔记布局规范
 - `references/diagnosis-and-observability.md`：诊断和可观测性
 - `docs/theory.md`：ECD 理论溯源
-- `docs/stages.md`：每个阶段的职责、输入输出和失败模式
+- `docs/stages.md`：每个阶段的职责、输入输出和失败模式（含 v1.1 等级模型）
 - `docs/subagents.md`：强制子 Agent 阶段和返回协议
-- `docs/implementation.md`：CLI 流程、bundle 编译、模板、schema 与 OpenSpec 输出
+- `docs/implementation.md`：CLI 流程、bundle 编译、模板、schema 与 OpenSpec 输出（含 v1.1 等级架构）
 - `agents/claude-code.md`：Claude Code Agent 接口定义
 
 Scripts：`scripts/` — CLI 辅助脚本（scaffold、render、validate、run record、achieve note、OpenSpec pack、canvas）

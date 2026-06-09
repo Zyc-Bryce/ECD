@@ -26,6 +26,34 @@ Before entering B-H, present a short approval pack containing:
 - `critical_assumptions`: the assumptions that materially affect semantics
 - `frozen_for_code`: the decisions `code` will treat as fixed truth
 
+## Tiered Approval Packs `[v1.1]`
+
+The approval pack varies by complexity tier. Present the pack that matches the tier determined by the complexity classifier.
+
+### Lite Approval Pack (L1)
+
+For L1 tasks, present a compact pack before entering J-Lite:
+
+- `reframed_goal`: the change you now believe the user actually wants
+- `retained_scope`: what will be delivered
+- `excluded_scope`: what will NOT be delivered
+- `acceptance_checks`: 3-5 concrete, verifiable checks
+- `frozen_for_code`: decisions code will treat as fixed truth
+
+**Rule:** Maximum 3 clarification questions before presenting this pack. If you need more, the task is likely L2 or L3.
+
+### Standard Approval Pack (L2)
+
+For L2 tasks, the Lite pack plus:
+
+- `critical_assumptions`: assumptions that materially affect semantics
+- `key_non_goals`: what is explicitly out of scope
+- `risk_register`: top 3 risks with mitigation notes
+
+### Full Approval Pack (L3)
+
+Unchanged from v1.0 — the complete 5-field pack (reframed_goal, retained_scope, excluded_scope, critical_assumptions, frozen_for_code) with full semantic coverage. For L3, also include scenario_fragments and blocking_unknowns from Stage A full output.
+
 ## Exit Rule
 
 Do not continue to `ecl plan` and B-H until the user has explicitly approved the approval pack.
