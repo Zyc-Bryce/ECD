@@ -210,13 +210,13 @@ The CLI is intentionally thin — it handles rendering, validation, and run reco
 
 > **Platform note:** Commands below use `python3` on macOS/Linux and `python` on Windows. Paths use the hypothetical user **Alice** and project **my-app** — replace them with your own.
 
-### `ecl pre` — Initialize Stage A approval workspace
+### `ecd pre` — Initialize Stage A approval workspace
 
 Scaffolds a normalized case JSON from a raw request, renders the Obsidian bundle, and validates it. This starts the high-interaction clarification phase (Stage A).
 
 ```bash
 # macOS / Linux
-python3 scripts/ecl.py pre \
+python3 skills/ecd/scripts/ecd.py pre \
   --request "Build a minimal app with a dashboard, an empty state, and one write flow." \
   --output /home/alice/projects/ecd-demo/bundle \
   --repo-path /home/alice/projects/my-app \
@@ -225,20 +225,20 @@ python3 scripts/ecl.py pre \
 
 ```powershell
 # Windows (PowerShell)
-python scripts/ecl.py pre `
+python skills/ecd/scripts/ecd.py pre `
   --request "Build a minimal app with a dashboard, an empty state, and one write flow." `
   --output C:\Users\Alice\Projects\ecd-demo\bundle `
   --repo-path C:\Users\Alice\Projects\my-app `
   --project-path C:\Users\Alice\Projects\my-app
 ```
 
-### `ecl plan` — Render the post-approval code-ready bundle
+### `ecd plan` — Render the post-approval code-ready bundle
 
 Reads a completed case JSON (Stage A must be `complete`), renders the full A-J bundle, validates it, and generates the OpenSpec pack. Exits with an error if `code_ready` is not `true`.
 
 ```bash
 # macOS / Linux
-python3 scripts/ecl.py plan \
+python3 skills/ecd/scripts/ecd.py plan \
   --input-json /home/alice/projects/ecd-demo/case.json \
   --output /home/alice/projects/ecd-demo/bundle \
   --force
@@ -246,42 +246,42 @@ python3 scripts/ecl.py plan \
 
 ```powershell
 # Windows (PowerShell)
-python scripts/ecl.py plan `
+python skills/ecd/scripts/ecd.py plan `
   --input-json C:\Users\Alice\Projects\ecd-demo\case.json `
   --output C:\Users\Alice\Projects\ecd-demo\bundle `
   --force
 ```
 
-### `ecl code` — Record a `/code` run
+### `ecd code` — Record a `/code` run
 
 Validates the bundle, checks that `code_ready=true`, parses the run payload, renders run evidence notes (`00-code-run.md`, `01-verification.md`), and re-validates the bundle.
 
 ```bash
 # macOS / Linux
-python3 scripts/ecl.py code \
+python3 skills/ecd/scripts/ecd.py code \
   --case /home/alice/projects/ecd-demo/bundle \
   --run-json /home/alice/projects/ecd-demo/run.json
 ```
 
 ```powershell
 # Windows (PowerShell)
-python scripts/ecl.py code `
+python skills/ecd/scripts/ecd.py code `
   --case C:\Users\Alice\Projects\ecd-demo\bundle `
   --run-json C:\Users\Alice\Projects\ecd-demo\run.json
 ```
 
-### `ecl achieve` — Render the final acceptance-and-archive verdict
+### `ecd achieve` — Render the final acceptance-and-archive verdict
 
 Validates the bundle, reads the latest code run, synthesizes an achieve verdict (`achieved` / `achieved_with_followups` / `not_achieved`), and renders `03-achieve.md`.
 
 ```bash
 # macOS / Linux
-python3 scripts/ecl.py achieve --case /home/alice/projects/ecd-demo/bundle
+python3 skills/ecd/scripts/ecd.py achieve --case /home/alice/projects/ecd-demo/bundle
 ```
 
 ```powershell
 # Windows (PowerShell)
-python scripts/ecl.py achieve --case C:\Users\Alice\Projects\ecd-demo\bundle
+python skills/ecd/scripts/ecd.py achieve --case C:\Users\Alice\Projects\ecd-demo\bundle
 ```
 
 ### Validation
@@ -290,12 +290,12 @@ Validate any bundle directly:
 
 ```bash
 # macOS / Linux
-python3 scripts/validate_ecl_bundle.py /home/alice/projects/ecd-demo/bundle
+python3 skills/ecd/scripts/validate_ecl_bundle.py /home/alice/projects/ecd-demo/bundle
 ```
 
 ```powershell
 # Windows (PowerShell)
-python scripts/validate_ecl_bundle.py C:\Users\Alice\Projects\ecd-demo\bundle
+python skills/ecd/scripts/validate_ecl_bundle.py C:\Users\Alice\Projects\ecd-demo\bundle
 ```
 
 ## Required Claude Code Capabilities
@@ -310,14 +310,14 @@ If your environment cannot launch real subagents, ECD can still be studied, but 
 
 ## Repository Map
 
-- [docs/theory.md](docs/theory.md): what ECD is, where its theory comes from, and what problem it is designed to solve
-- [docs/stages.md](docs/stages.md): every stage, owner, input, output, exit gate, and failure mode
-- [docs/subagents.md](docs/subagents.md): exactly where real subagents are required and what they return
-- [docs/implementation.md](docs/implementation.md): CLI flow, bundle compilation, templates, schema, and OpenSpec output
-- [docs/zh-CN/theory.md](docs/zh-CN/theory.md): 中文理论文档
-- [docs/zh-CN/stages.md](docs/zh-CN/stages.md): 中文阶段模型
-- [docs/zh-CN/subagents.md](docs/zh-CN/subagents.md): 中文子代理协议
-- [docs/zh-CN/implementation.md](docs/zh-CN/implementation.md): 中文实现说明
+- [skills/ecd/docs/theory.md](skills/ecd/docs/theory.md): what ECD is, where its theory comes from, and what problem it is designed to solve
+- [skills/ecd/docs/stages.md](skills/ecd/docs/stages.md): every stage, owner, input, output, exit gate, and failure mode
+- [skills/ecd/docs/subagents.md](skills/ecd/docs/subagents.md): exactly where real subagents are required and what they return
+- [skills/ecd/docs/implementation.md](skills/ecd/docs/implementation.md): CLI flow, bundle compilation, templates, schema, and OpenSpec output
+- [skills/ecd/docs/zh-CN/theory.md](skills/ecd/docs/zh-CN/theory.md): 中文理论文档
+- [skills/ecd/docs/zh-CN/stages.md](skills/ecd/docs/zh-CN/stages.md): 中文阶段模型
+- [skills/ecd/docs/zh-CN/subagents.md](skills/ecd/docs/zh-CN/subagents.md): 中文子代理协议
+- [skills/ecd/docs/zh-CN/implementation.md](skills/ecd/docs/zh-CN/implementation.md): 中文实现说明
 
 ## Acknowledgments
 

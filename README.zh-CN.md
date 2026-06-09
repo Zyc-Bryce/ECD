@@ -17,7 +17,7 @@
 
 `ecd`（Evolutionary Constraint Development，演进约束开发）是一套 Claude Code Skill。在 Claude Code 中输入 `/ecd` 即可调用。
 
-> **🆕 第一次用？** → [`docs/zh-CN/beginners-guide.md`](docs/zh-CN/beginners-guide.md) 小白入门完全指南（5 分钟看懂）
+> **🆕 第一次用？** → [`skills/ecd/docs/zh-CN/beginners-guide.md`](skills/ecd/docs/zh-CN/beginners-guide.md) 小白入门完全指南（5 分钟看懂）
 > **v1.1 新特性：** 复杂度自适应（Lite/Standard/Full 三级路由）、Superpowers 互补集成、增量模式。详见 [`USAGE.zh-CN.md`](USAGE.zh-CN.md)。
 
 1. `pre` — 追问和整理，直到需求语义足够冻结，可以进入审批门。
@@ -211,13 +211,13 @@ CLI 本身是薄工具层，负责渲染、校验和记录。真正的推理行�
 
 > **平台提示：** macOS/Linux 使用 `python3`，Windows 使用 `python`。以下路径以用户 **Alice**、项目 **my-app** 为例——请替换为你自己的路径。
 
-### `ecl pre` — 初始化 Stage A 审批工作区
+### `ecd pre` — 初始化 Stage A 审批工作区
 
 从原始请求创建 normalized case JSON scaffold，渲染 Obsidian bundle 并校验。这将启动高交互的澄清阶段（Stage A）。
 
 ```bash
 # macOS / Linux
-python3 skills/ecd/scripts/ecl.py pre \
+python3 skills/ecd/scripts/ecd.py pre \
   --request "Build a minimal app with a dashboard, an empty state, and one write flow." \
   --output /home/alice/projects/ecd-demo/bundle \
   --repo-path /home/alice/projects/my-app \
@@ -226,20 +226,20 @@ python3 skills/ecd/scripts/ecl.py pre \
 
 ```powershell
 # Windows (PowerShell)
-python skills/ecd/scripts/ecl.py pre `
+python skills/ecd/scripts/ecd.py pre `
   --request "Build a minimal app with a dashboard, an empty state, and one write flow." `
   --output C:\Users\Alice\Projects\ecd-demo\bundle `
   --repo-path C:\Users\Alice\Projects\my-app `
   --project-path C:\Users\Alice\Projects\my-app
 ```
 
-### `ecl plan` — 渲染审批后的 code-ready bundle
+### `ecd plan` — 渲染审批后的 code-ready bundle
 
 读取已完成的 case JSON（Stage A 必须为 `complete`），渲染完整的 A-J bundle，校验并生成 OpenSpec pack。如果 `code_ready` 不为 `true` 则报错退出。
 
 ```bash
 # macOS / Linux
-python3 skills/ecd/scripts/ecl.py plan \
+python3 skills/ecd/scripts/ecd.py plan \
   --input-json /home/alice/projects/ecd-demo/case.json \
   --output /home/alice/projects/ecd-demo/bundle \
   --force
@@ -247,42 +247,42 @@ python3 skills/ecd/scripts/ecl.py plan \
 
 ```powershell
 # Windows (PowerShell)
-python skills/ecd/scripts/ecl.py plan `
+python skills/ecd/scripts/ecd.py plan `
   --input-json C:\Users\Alice\Projects\ecd-demo\case.json `
   --output C:\Users\Alice\Projects\ecd-demo\bundle `
   --force
 ```
 
-### `ecl code` — 记录一次 `/code` 运行
+### `ecd code` — 记录一次 `/code` 运行
 
 校验 bundle，检查 `code_ready=true`，解析运行 payload，渲染运行证据笔记（`00-code-run.md`、`01-verification.md`）并重新校验。
 
 ```bash
 # macOS / Linux
-python3 skills/ecd/scripts/ecl.py code \
+python3 skills/ecd/scripts/ecd.py code \
   --case /home/alice/projects/ecd-demo/bundle \
   --run-json /home/alice/projects/ecd-demo/run.json
 ```
 
 ```powershell
 # Windows (PowerShell)
-python skills/ecd/scripts/ecl.py code `
+python skills/ecd/scripts/ecd.py code `
   --case C:\Users\Alice\Projects\ecd-demo\bundle `
   --run-json C:\Users\Alice\Projects\ecd-demo\run.json
 ```
 
-### `ecl achieve` — 渲染最终验收与归档判定
+### `ecd achieve` — 渲染最终验收与归档判定
 
 校验 bundle，读取最近一次 code run，综合生成 achieve 判定（`achieved` / `achieved_with_followups` / `not_achieved`），渲染 `03-achieve.md`。
 
 ```bash
 # macOS / Linux
-python3 skills/ecd/scripts/ecl.py achieve --case /home/alice/projects/ecd-demo/bundle
+python3 skills/ecd/scripts/ecd.py achieve --case /home/alice/projects/ecd-demo/bundle
 ```
 
 ```powershell
 # Windows (PowerShell)
-python skills/ecd/scripts/ecl.py achieve --case C:\Users\Alice\Projects\ecd-demo\bundle
+python skills/ecd/scripts/ecd.py achieve --case C:\Users\Alice\Projects\ecd-demo\bundle
 ```
 
 ### 直接校验

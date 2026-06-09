@@ -1,6 +1,6 @@
 # Plan Approval Gate
 
-Use this reference during `ecl pre`.
+Use this reference during `ecd pre`.
 
 ## Purpose
 
@@ -72,7 +72,7 @@ For L3 tasks:
 
 ## Exit Rule
 
-Do not continue to `ecl plan` and B-H until the user has explicitly approved the approval pack.
+Do not continue to `ecd plan` and B-H until the user has explicitly approved the approval pack.
 
 If the user responds with changes, update the approval pack and ask for approval again.
 

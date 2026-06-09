@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Unified CLI helpers for ECL v2.
+Unified CLI helpers for ECD (Evolutionary Constraint Development).
 """
 
 from __future__ import annotations
@@ -389,7 +389,7 @@ def command_achieve(args) -> int:
 
 
 def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="ECL v2 CLI helpers")
+    parser = argparse.ArgumentParser(description="ECD (Evolutionary Constraint Development) CLI helpers")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     scaffold = subparsers.add_parser("scaffold", help="Create a normalized case JSON scaffold from a raw request")
@@ -431,9 +431,9 @@ def build_parser() -> argparse.ArgumentParser:
 
     plan = subparsers.add_parser(
         "plan",
-        help="Render the post-approval code-ready ECL v2 bundle from a normalized case JSON",
+        help="Render the post-approval code-ready ECD bundle from a normalized case JSON",
     )
-    plan.add_argument("--input-json", required=True, help="Path to normalized ECL v2 JSON input with Stage A complete")
+    plan.add_argument("--input-json", required=True, help="Path to normalized ECD JSON input with Stage A complete")
     plan.add_argument("--output", required=True, help="Output bundle directory")
     plan.add_argument("--force", action="store_true", help="Overwrite an existing output directory")
     plan.set_defaults(func=command_plan)

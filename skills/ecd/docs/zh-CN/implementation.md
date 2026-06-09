@@ -56,7 +56,7 @@ ECD 有两层：
 
 ## CLI 架构
 
-### `scripts/ecl.py`
+### `scripts/ecd.py`
 
 这是公开暴露的 CLI 入口。它通过子命令编排管道：
 
@@ -71,7 +71,7 @@ ECD 有两层：
 内部调用链：
 
 ```
-ecl.py
+ecd.py
   ├── scaffold_case_json.py    # 创建 case JSON scaffold
   ├── render_obsidian_bundle.py # 将 case JSON 渲染为 Obsidian 笔记包
   ├── validate_ecl_bundle.py   # 校验 bundle 完整性和一致性

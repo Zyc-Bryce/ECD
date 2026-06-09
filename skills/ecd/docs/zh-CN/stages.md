@@ -390,7 +390,7 @@ Stage J 负责把规划真值编译成 coder 真正可执行的产物。
 
 ### Claude Code 实现
 
-运行 `python scripts/ecl.py achieve --case /abs/path/to/bundle` 渲染 achieve 判定。
+运行 `python scripts/ecd.py achieve --case /abs/path/to/bundle` 渲染 achieve 判定。
 
 ### 退出门
 

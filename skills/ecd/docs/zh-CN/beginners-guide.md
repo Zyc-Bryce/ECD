@@ -650,7 +650,7 @@ Bundle 是一组 markdown 文件，记录 ECD 从需求到代码的完整过程�
 
 ### Q18: ECD 有 CLI 工具，我必须用吗？
 
-**不必须。** CLI 工具（`ecl.py`）是可选的辅助工具，用于渲染和校验 bundle。ECD 的核心行为由 SKILL.md 驱动，不依赖 CLI。
+**不必须。** CLI 工具（`ecd.py`）是可选的辅助工具，用于渲染和校验 bundle。ECD 的核心行为由 SKILL.md 驱动，不依赖 CLI。
 
 ### Q19: 我可以只学一部分 ECD 吗？
 
@@ -718,7 +718,7 @@ ECD 有一些术语听起来很学术。这里是它们的通俗解释：
 → [`references/incremental-mode.md`](../../references/incremental-mode.md) — 已有bundle的增量修改（10分钟阅读）
 
 ### 完整使用参考
-→ [`USAGE.zh-CN.md`](../../../USAGE.zh-CN.md) — 完整使用指南（含所有场景和FAQ）
+→ [`USAGE.zh-CN.md`](../../../../USAGE.zh-CN.md) — 完整使用指南（含所有场景和FAQ）
 
 ---
 

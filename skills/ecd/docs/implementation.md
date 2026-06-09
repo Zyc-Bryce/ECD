@@ -59,7 +59,7 @@ The scripts do not replace reasoning. They make reasoning inspectable and machin
 
 ## CLI Architecture
 
-### `scripts/ecl.py`
+### `scripts/ecd.py`
 
 This is the public CLI entrypoint. It exposes:
 

@@ -103,16 +103,16 @@ CLI 辅助脚本位于本技能目录的 `scripts/` 下：
 
 ```bash
 # 从原始需求初始化 Stage A 工作区
-python scripts/ecl.py pre --request "..." --output /abs/path/to/bundle --repo-path /abs/path/to/repo
+python scripts/ecd.py pre --request "..." --output /abs/path/to/bundle --repo-path /abs/path/to/repo
 
 # 审批后渲染 code-ready bundle
-python scripts/ecl.py plan --input-json /abs/path/to/case.json --output /abs/path/to/bundle --force
+python scripts/ecd.py plan --input-json /abs/path/to/case.json --output /abs/path/to/bundle --force
 
 # 记录 code 运行
-python scripts/ecl.py code --case /abs/path/to/bundle --run-json /abs/path/to/run.json
+python scripts/ecd.py code --case /abs/path/to/bundle --run-json /abs/path/to/run.json
 
 # 渲染最终 achieve 判定
-python scripts/ecl.py achieve --case /abs/path/to/bundle
+python scripts/ecd.py achieve --case /abs/path/to/bundle
 
 # 校验 bundle
 python scripts/validate_ecl_bundle.py /abs/path/to/bundle
@@ -374,14 +374,14 @@ ECD A-Lite → J-Lite → Superpowers TDD → Superpowers verify → ECD achieve
 ## 工作模式
 
 1. 从原始需求开始
-2. 运行 `python scripts/ecl.py pre` 初始化 Stage A 工作区
+2. 运行 `python scripts/ecd.py pre` 初始化 Stage A 工作区
 3. 做高交互审批门工作，与用户一起冻结审批包
 4. 构建或更新规范化的 case 数据直到 Stage A 完成
-5. 运行 `python scripts/ecl.py plan --input-json ...` 收敛 B-H 和 J
+5. 运行 `python scripts/ecd.py plan --input-json ...` 收敛 B-H 和 J
 6. 用 `python scripts/validate_ecl_bundle.py` 校验
 7. 执行 code，仅从 `90-code-handoff.md` 进入
 8. 用 `python scripts/render_code_run.py` 记录运行
-9. 用 `python scripts/ecl.py achieve` 关闭
+9. 用 `python scripts/ecd.py achieve` 关闭
 
 ## 资源索引
 
