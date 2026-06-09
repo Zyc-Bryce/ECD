@@ -29,9 +29,7 @@
   "bugs": {
     "url": "https://github.com/Zyc-Bryce/ECD/issues"
   },
-  "bin": {
-    "ecd-install": "./bin/install.js"
-  },
+  "bin": "./bin/install.js",
   "files": [
     ".claude-plugin/",
     "skills/",
