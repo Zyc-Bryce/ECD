@@ -71,6 +71,18 @@ greenfield 项目（无现有仓库）→ Q1 默认 L2
 
 格式规范：`[等级] 判定依据: Q1结果 + Q2结果 + Q3结果`，其中 Q1/Q2/Q3 用中文简述。
 
+### 版本号体系说明
+
+本项目使用三套版本号，职责不同：
+
+| 版本号位置 | 当前值 | 含义 |
+|-----------|--------|------|
+| `package.json` → `version` | `1.3.0` | **包发布版本**（语义化版本，唯一权威） |
+| `[v1.1]`/`[v1.2]` 等 SKILL.md 内标记 | `v1.1`, `v1.2` | **功能引入标记**（标注某特性首次出现在哪个包版本，向后兼容） |
+| `schemas/ecl-v2/schema.yaml` → `version` | `2.2` | **ECL schema 格式版本**（独立于包版本，仅 schema 结构变更时递增） |
+
+> 例如：`[v1.1]` 表示复杂度分类器在包版本 1.1.0 引入，该标记在后续版本中保留以追溯功能来源。
+
 ### L3 完整性保证
 
 **L3 (ECD-Full) 行为完全等同于 ECD v1.0。** 此等级下所有阶段、子 Agent、退出门均不变。已有 bundle 若缺失 tier 字段，默认视为 L3 处理。
@@ -227,7 +239,7 @@ plan 结束时，`90-code-handoff.md` 必须冻结：
 - 验证命令和浏览器检查
 - 什么会触发流程重开
 
-伴侣文档（`91`/`92`/`95`/`96`/`97`/`98`/`99`）是检查面，不是备用真相源。
+伴侣文档（`91`/`92`/`95`/`96`/`97`/`98`/`99`）是检查面，不是备用真相源。其中 `99-code-handoff.md` 是 `90-code-handoff.md` 经 J 阶段编译后的归档副本（仅 L2/L3），`/code` 始终以 `90-code-handoff.md` 为唯一入口。
 
 详见 `references/handoff-quality-bar.md`。
 
@@ -399,6 +411,7 @@ ECD A-Lite → J-Lite → Superpowers TDD → Superpowers verify → ECD achieve
 - `references/ecl-schema.md`：bundle 和结构化块 schema
 - `references/obsidian-layout.md`：Obsidian 笔记布局规范
 - `references/diagnosis-and-observability.md`：诊断和可观测性
+- `references/zh-CN/`：🆕 **上述 reference 文件的中文翻译**（与英文版文件名一一对应）
 - `docs/zh-CN/beginners-guide.md`：🆕 **小白入门完全指南**（决策树、场景速查、常见错误、FAQ、术语词典）
 - `docs/theory.md`：ECD 理论溯源
 - `docs/stages.md`：每个阶段的职责、输入输出和失败模式（含 v1.1 等级模型）

@@ -1,7 +1,7 @@
 name: ecl-v2
-version: 2.1
+version: 2.2
 description: A-H constraint-solving workflow with tiered complexity routing (Lite/Standard/Full), a single shared ledger, and one final handoff.
-# Tier model (v2.1): L1=Lite (2-3 stages, no subagents), L2=Standard (5-7 stages, optional subagents), L3=Full (10 stages, mandatory subagents).
+# Tier model (v2.2): L1=Lite (2-3 stages, no subagents), L2=Standard (5-7 stages, optional subagents), L3=Full (10 stages, mandatory subagents).
 # Backward-compatible: missing ecl_tier defaults to L3.
 notes:
   - id: overview
@@ -133,7 +133,8 @@ notes:
     block_key: ecl.code_preflight
     template: code-preflight.md
     tiers: [L1, L2, L3]
-    requires: [code_batches]
+    tiers_note: "L1: requires []; L2/L3: requires [code_batches]"
+    requires: []
   - id: compile_for_code
     kind: stage
     letter: J

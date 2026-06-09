@@ -1,9 +1,59 @@
 # ECD 更新说明
 
-> v1.1：基于 5 任务对比分析，修复 v1.0 三大核心问题
+> v1.3：自我进化 — 修复版本号不一致 + Schema L1 依赖链断裂 + 中文本地化补齐 12 篇 reference
 > v1.2：基于 50 任务深度验证，四项精准优化冲刺 90 分成熟度 + 插件标准化
+> v1.1：基于 5 任务对比分析，修复 v1.0 三大核心问题
 
 ---
+
+## v1.3 更新说明 `[2026-06-09]`
+
+### 自我进化：ECD 用 ECD 方法论进化自身
+
+首次将 ECD 的 pre→plan→code→achieve 闭环应用于 ECD 技能源文件本身，修复了客观缺陷并补全了中文本地化。
+
+### 更新方式
+
+已安装用户通过以下任一方式更新：
+
+```bash
+# 方式一：npx 一键更新（推荐）
+npx @zyc-bryce/ecd
+
+# 方式二：Claude Code 插件更新
+claude plugins update ecd
+
+# 方式三：重新安装 marketplace
+# 重启 Claude Code 即可自动检测更新
+```
+
+### v1.3 修复与改进
+
+| # | 类别 | 说明 | 影响 |
+|---|------|------|------|
+| 1 | **Bug修复** | 版本号统一：`package.json`(1.2.3)、`plugin.json`(1.2.2)、`marketplace.json`(1.2.2) → 统一 `1.3.0` | 消除版本混乱 |
+| 2 | **Bug修复** | SKILL.md 新增版本号体系说明（包版本 vs 功能标记 vs Schema格式版本） | 厘清三套版本号 |
+| 3 | **Bug修复** | Schema L1 依赖链断裂修复：`code_preflight` 不再无条件依赖 `code_batches`（L2/L3 only） | L1 路径可正常走通 |
+| 4 | **Bug修复** | 澄清 `90-code-handoff.md` 与 `99-code-handoff.md` 关系（后者是前者的 J 阶段编译归档副本） | 消除文档歧义 |
+| 5 | **中文化** | 新增 `references/zh-CN/` 目录，翻译全部 12 篇 reference 文档 | 中文用户首次获得完整的 reference 中文阅读体验 |
+| 6 | **中文化** | SKILL.md 资源索引新增 `references/zh-CN/` 路径引用 | 用户可发现中文参考文档 |
+| 7 | **改进** | Schema 版本 `2.1` → `2.2`（格式版本独立于包版本） | 版本号体系统一 |
+
+### v1.3 文件变更
+
+| 文件 | 变更 |
+|------|------|
+| `package.json` | version 1.2.3 → 1.3.0 |
+| `.claude-plugin/plugin.json` | version 1.2.2 → 1.3.0 |
+| `.claude-plugin/marketplace.json` | version 1.2.2 → 1.3.0（2处） |
+| `USAGE.zh-CN.md` | 标题 v1.1 → v1.3 |
+| `skills/ecd/SKILL.md` | 新增版本号体系说明 + 90/99 handoff 澄清 + 资源索引补充 `references/zh-CN/` |
+| `skills/ecd/schemas/ecl-v2/schema.yaml` | version 2.1→2.2；修复 `code_preflight` L1 依赖链断裂 |
+| `skills/ecd/references/zh-CN/*.md` | **新增 12 篇**中文翻译 |
+| `CHANGELOG.zh-CN.md` | 追加 v1.3 条目 |
+
+---
+
 
 ## v1.2 更新说明 `[2026-06-09]`
 

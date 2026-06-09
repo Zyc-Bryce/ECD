@@ -18,7 +18,7 @@
 `ecd`（Evolutionary Constraint Development，演进约束开发）是一套 Claude Code Skill。在 Claude Code 中输入 `/ecd` 即可调用。
 
 > **🆕 第一次用？** → [`skills/ecd/docs/zh-CN/beginners-guide.md`](skills/ecd/docs/zh-CN/beginners-guide.md) 小白入门完全指南（5 分钟看懂）
-> **v1.1 新特性：** 复杂度自适应（Lite/Standard/Full 三级路由）、Superpowers 互补集成、增量模式。详见 [`USAGE.zh-CN.md`](USAGE.zh-CN.md)。
+> **v1.3 新特性：** 中文本地化补齐（12篇 reference 全文翻译）、版本号体系统一、Schema L1 依赖链修复。详见 [`USAGE.zh-CN.md`](USAGE.zh-CN.md)。
 
 1. `pre` — 追问和整理，直到需求语义足够冻结，可以进入审批门。
 2. `plan` — 让保留下来的路径收敛成一个 code-ready bundle。

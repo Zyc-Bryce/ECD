@@ -1,4 +1,4 @@
-# ECD v1.1 使用指南
+# ECD v1.3 使用指南
 
 > 演进约束开发 (Evolutionary Constraint Development) — 从模糊需求到可运行代码的完整闭环
 >
