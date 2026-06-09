@@ -1,0 +1,22 @@
+{
+  "name": "ecd-marketplace",
+  "owner": {
+    "name": "Zyc-Bryce",
+    "url": "https://github.com/Zyc-Bryce"
+  },
+  "metadata": {
+    "description": "ECD (演进约束开发) — 语义冻结 + 约束驱动的 AI 编程方法论。包含复杂度自适应引擎、独立子Agent 审查、红蓝对抗安全审计。",
+    "version": "1.2.0"
+  },
+  "plugins": [
+    {
+      "name": "ecd",
+      "source": "./",
+      "description": "演进约束开发 (Evolutionary Constraint Development) — pre-plan-code-achieve 闭环，L1/L2/L3 三级复杂度自适应路由",
+      "version": "1.2.0",
+      "strict": false,
+      "skills": ["./"],
+      "homepage": "https://github.com/Zyc-Bryce/ECD"
+    }
+  ]
+}

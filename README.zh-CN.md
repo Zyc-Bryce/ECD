@@ -39,11 +39,56 @@
 
 ## 安装方式
 
-选择以下任一方式即可。所有示例以 **Alice** 作为 Windows 用户名、**my-app** 作为项目名——请替换为你自己的。
+以下三种方式**任选其一**即可。所有示例以 **Alice** 作为 Windows 用户名、**my-app** 作为项目名——请替换为你自己的。
 
 ---
 
-### 方式一：命令行安装
+### 方式一：插件安装（⭐ 推荐）
+
+只需在 Claude Code 的配置文件中加几行，自动下载、自动更新，无需手动管理文件。
+
+#### 第 1 步 — 打开配置文件
+
+| 系统 | 配置文件路径 |
+|------|-------------|
+| Windows | `%USERPROFILE%\.claude\settings.json` |
+| macOS / Linux | `~/.claude/settings.json` |
+
+> 如果文件不存在，新建一个空 JSON 文件：`{}`
+
+#### 第 2 步 — 添加 ECD 市场源和启用插件
+
+在 `settings.json` 中添加：
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "ecd-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "Zyc-Bryce/ECD"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "ecd@ecd-marketplace": true
+  }
+}
+```
+
+> 💡 如果文件中已有 `extraKnownMarketplaces` 或 `enabledPlugins`，将新条目**合并进去**，不要覆盖已有内容。
+
+#### 第 3 步 — 重启 Claude Code
+
+关闭并重新打开 Claude Code。输入 `/ecd` 验证——如果看到 ECD 提示信息，安装成功。
+
+> ✅ **优势**：后续 ECD 发新版本时，Claude Code 会自动检测更新。你也无需手动管理文件。
+
+---
+
+### 方式二：命令行安装
+
+适合习惯命令行的用户。本质是克隆仓库 → 复制到 skills 目录。
 
 #### Windows (PowerShell)
 
@@ -86,7 +131,7 @@ git clone https://github.com/Zyc-Bryce/ECD.git ~/.claude/skills/evolutionary-con
 
 ---
 
-### 方式二：手动安装（无需终端）
+### 方式三：手动安装（无需终端）
 
 如果你不想使用命令行，可以按以下步骤手动操作。
 

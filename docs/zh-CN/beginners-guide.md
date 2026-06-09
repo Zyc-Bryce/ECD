@@ -101,9 +101,29 @@
 
 在 Claude Code 中输入 `/ecd`，如果看到 ECD 技能的提示信息，说明已安装。
 
-如果没安装：
+如果没安装，推荐使用插件方式（自动更新）：
+
+打开 `~/.claude/settings.json`（Windows: `%USERPROFILE%\.claude\settings.json`），添加：
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "ecd-marketplace": {
+      "source": { "source": "github", "repo": "Zyc-Bryce/ECD" }
+    }
+  },
+  "enabledPlugins": {
+    "ecd@ecd-marketplace": true
+  }
+}
+```
+
+> 如果文件已有其他内容，把 `extraKnownMarketplaces` 和 `enabledPlugins` **合并进去**，不要覆盖。
+
+重启 Claude Code 即可。或者用命令行方式：
+
 ```powershell
-# 克隆到 skills 目录
+# 克隆到 skills 目录（Windows PowerShell）
 git clone https://github.com/Zyc-Bryce/ECD.git $env:USERPROFILE\.claude\skills\evolutionary-constraint-development
 ```
 

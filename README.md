@@ -40,7 +40,50 @@ Choose one of the methods below. All examples use **Alice** as the Windows usern
 
 ---
 
-### Method 1: Command-Line Install
+### Method 1: Plugin Install (⭐ Recommended)
+
+Add a few lines to your Claude Code config — auto-download, auto-update, no manual file management.
+
+#### Step 1 — Open your settings file
+
+| OS | Config file path |
+|---|---|
+| Windows | `%USERPROFILE%\.claude\settings.json` |
+| macOS / Linux | `~/.claude/settings.json` |
+
+> If the file doesn't exist, create an empty JSON file: `{}`
+
+#### Step 2 — Add ECD marketplace and enable plugin
+
+Add these entries to `settings.json`:
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "ecd-marketplace": {
+      "source": {
+        "source": "github",
+        "repo": "Zyc-Bryce/ECD"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "ecd@ecd-marketplace": true
+  }
+}
+```
+
+> 💡 If `extraKnownMarketplaces` or `enabledPlugins` already exist, **merge** the new entries — don't overwrite existing content.
+
+#### Step 3 — Restart Claude Code
+
+Close and reopen Claude Code. Type `/ecd` to verify — if you see the ECD prompt, you're all set.
+
+> ✅ **Advantage**: Claude Code will automatically detect new versions. No manual file management needed.
+
+---
+
+### Method 2: Command-Line Install
 
 #### Windows (PowerShell)
 
@@ -83,7 +126,7 @@ After installation, the skill is automatically discovered the next time you star
 
 ---
 
-### Method 2: Manual Install (No Terminal Required)
+### Method 3: Manual Install (No Terminal Required)
 
 If you prefer to avoid the command line, follow these steps.
 
