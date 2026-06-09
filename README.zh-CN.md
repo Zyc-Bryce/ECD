@@ -47,7 +47,7 @@
 ### 方式一：npx 一键安装（⭐ 最简）
 
 ```bash
-npx ecd-claude-code
+npx @zyc-bryce/ecd
 ```
 
 自动配置 Claude Code，重启即可使用。无需手动编辑任何文件。
