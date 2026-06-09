@@ -48,6 +48,29 @@ greenfield 项目（无现有仓库）→ Q1 默认 L2
 | **L2 ECD-Standard** | A → B → C → D(可选) → E(精简) → H(可选) → J → code → achieve | 0-2 | 35k-55k | 新增API、中等功能、多文件改动 |
 | **L3 ECD-Full** | A → B → C → D → E → F → G → H → J → code → achieve | 5 (强制) | 65k-105k | 认证系统、架构变更、安全敏感、需求模糊 |
 
+### 微型任务快速通道 `[v1.2]`
+
+在定级完成后，额外检查微型任务条件。**全部满足**则跳过 pre/plan 直接进入 code：
+
+| 条件 | 阈值 |
+|------|------|
+| 预估代码改动 | **<10 行** |
+| 安全/正确性风险 | **L1**（仅UI样式/文案/排版） |
+| 需求清晰度 | **明确无歧义** |
+
+触发微型通道时：不生成 bundle、不启动子Agent、不渲染审批包。直接执行代码改动 → 快速验证 → 完成。预估 Token：**3k-8k**。
+
+> 典型微型任务：修改拼写(T02)、调整字号(T06)、添加 placeholder(T15)、修改 hover 效果(T17)
+
+### 分类理由输出 `[v1.2]`
+
+在审批包顶部输出一行分类理由，格式：
+```
+[L2] 判定依据: 6文件 + 功能逻辑风险 + 需求明确
+```
+
+格式规范：`[等级] 判定依据: Q1结果 + Q2结果 + Q3结果`，其中 Q1/Q2/Q3 用中文简述。
+
 ### L3 完整性保证
 
 **L3 (ECD-Full) 行为完全等同于 ECD v1.0。** 此等级下所有阶段、子 Agent、退出门均不变。已有 bundle 若缺失 tier 字段，默认视为 L3 处理。
@@ -61,7 +84,7 @@ greenfield 项目（无现有仓库）→ Q1 默认 L2
 **achieve-Lite (L1)**：运行验证命令 → 检查首次打开体验 → 裁决 archived/left_open。
 
 **L2 可选阶段规则**：
-- D (批判)：需求单元 >5 或存在横切关注点时运行
+- D (批判)：需求单元 >3 或存在横切关注点时运行
 - H (评审)：交接包有 >3 个实现单元时运行
 - E (补全)：仅解决高影响依赖缺口，跳过执行链编译
 
@@ -306,16 +329,25 @@ ECD A-Lite → J-Lite → Superpowers TDD → Superpowers verify → ECD achieve
 
 详见 `references/superpowers-integration.md`。
 
-## 增量模式 `[v1.1]`
+## 增量模式 `[v1.2]`
 
 已有 ECD bundle 的项目，支持增量修改而无需重走完整流水线。
 
-### 检测
+### 自动检测（优先于分类器）
 
-在复杂度分类器之前运行：
-1. 目标路径存在 ECD bundle（`00-overview.md` + `90-code-handoff.md`）？
-2. 用户请求包含增量信号（update/modify/change/add to existing/修改/增加/调整）？
-3. 都满足 → 进入增量模式，跳过分类器
+增量模式检测在复杂度分类器**之前**运行：
+
+1. 检查目标路径是否存在 ECD bundle（`00-overview.md` + `90-code-handoff.md`）
+2. **如果存在 bundle** → 主动提示用户：
+   ```
+   🤖 ECD：[增量模式] 检测到已有 ECD bundle。
+       是否使用增量模式？（仅更新变更部分，Token ~10k-15k）
+       回复"是"或直接描述变更 → 增量模式
+       回复"否"或"完整流程" → 正常分类器
+   ```
+3. 用户确认"是"或请求包含增量信号词（update/modify/change/add to existing/修改/增加/调整/更新）→ 进入增量模式，跳过分类器
+4. 用户确认"否" → 继续正常分类器流程
+5. 无 bundle → 直接进入分类器
 
 ### 变更路由
 
@@ -367,6 +399,7 @@ ECD A-Lite → J-Lite → Superpowers TDD → Superpowers verify → ECD achieve
 - `references/ecl-schema.md`：bundle 和结构化块 schema
 - `references/obsidian-layout.md`：Obsidian 笔记布局规范
 - `references/diagnosis-and-observability.md`：诊断和可观测性
+- `docs/zh-CN/beginners-guide.md`：🆕 **小白入门完全指南**（决策树、场景速查、常见错误、FAQ、术语词典）
 - `docs/theory.md`：ECD 理论溯源
 - `docs/stages.md`：每个阶段的职责、输入输出和失败模式（含 v1.1 等级模型）
 - `docs/subagents.md`：强制子 Agent 阶段和返回协议

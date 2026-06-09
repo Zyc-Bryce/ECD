@@ -20,6 +20,22 @@ When the tier is L1, use the `_lite` template variants where they exist:
 - `code-handoff-lite.md` instead of `code-handoff.md`
 - `constraint-ledger-lite.md` instead of `constraint-ledger.md`
 
+### Micro-Task Fast Path `[v1.2]`
+
+When ALL of the following conditions are met, skip pre/plan entirely and proceed directly to code:
+
+- Estimated code change: **<10 lines**
+- Safety/correctness risk: **L1** (UI style/text/layout only)
+- Requirement clarity: **clear and unambiguous**
+
+Micro-task behavior:
+- No bundle generation, no subagent spawning, no approval pack rendering
+- Execute the code change directly → quick verification → done
+- Expected Token: **3k-8k**
+- If any doubt about the classification, fall back to normal L1-Lite flow
+
+Typical micro-tasks: fixing typos (T02), adjusting font sizes (T06), adding placeholders (T15), modifying hover effects (T17)
+
 ## Shared Ledger
 
 `05-constraint-ledger.md` is the single source of truth for:
@@ -109,7 +125,7 @@ Exit gate:
 
 ## D / Critique `[L2, L3]`
 
-**L2:** Optional. Run only if requirement_units > 5 or cross-cutting concerns exist.
+**L2:** Optional. Run only if requirement_units > 3 or cross-cutting concerns exist.
 **L3:** Mandatory. Full independent critique with spawned subagent.
 
 - spawn one independent critique agent (mandatory for L3, optional for L2)

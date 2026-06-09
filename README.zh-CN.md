@@ -17,6 +17,7 @@
 
 `ecd`（Evolutionary Constraint Development，演进约束开发）是一套 Claude Code Skill。在 Claude Code 中输入 `/ecd` 即可调用。
 
+> **🆕 第一次用？** → [`docs/zh-CN/beginners-guide.md`](docs/zh-CN/beginners-guide.md) 小白入门完全指南（5 分钟看懂）
 > **v1.1 新特性：** 复杂度自适应（Lite/Standard/Full 三级路由）、Superpowers 互补集成、增量模式。详见 [`USAGE.zh-CN.md`](USAGE.zh-CN.md)。
 
 1. `pre` — 追问和整理，直到需求语义足够冻结，可以进入审批门。
@@ -253,6 +254,7 @@ python scripts/validate_ecl_bundle.py C:\Users\Alice\Projects\ecd-demo\bundle
 
 ## 仓库导览
 
+- **[docs/zh-CN/beginners-guide.md](docs/zh-CN/beginners-guide.md)：🆕 小白入门完全指南**——零基础也能看懂，5 分钟理解 ECD，含决策树、场景速查、常见错误、20 个 FAQ、术语词典
 - [USAGE.zh-CN.md](USAGE.zh-CN.md)：**v1.1 详细使用指南**——复杂度分类器、三级工作流、Superpowers 集成、增量模式、常见场景与 FAQ
 - [docs/zh-CN/theory.md](docs/zh-CN/theory.md)：ECD 的理论源头、定位和要解决的问题
 - [docs/zh-CN/stages.md](docs/zh-CN/stages.md)：每个阶段的职责、输入输出、exit gate 和失败方式

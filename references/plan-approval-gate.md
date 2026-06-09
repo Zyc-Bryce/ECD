@@ -26,14 +26,26 @@ Before entering B-H, present a short approval pack containing:
 - `critical_assumptions`: the assumptions that materially affect semantics
 - `frozen_for_code`: the decisions `code` will treat as fixed truth
 
-## Tiered Approval Packs `[v1.1]`
+## Tiered Approval Packs `[v1.2]`
 
 The approval pack varies by complexity tier. Present the pack that matches the tier determined by the complexity classifier.
+
+**Every approval pack MUST begin with a classifier explanation line** `[v1.2]`:
+
+```
+[L2] 判定依据: 6文件 + 功能逻辑风险 + 需求明确
+```
+
+Format: `[Tier] 判定依据: Q1_result + Q2_result + Q3_result` where each Q result is a brief Chinese description:
+- Q1: "≤3文件" / "4-10文件" / ">10文件"
+- Q2: "UI样式风险" / "功能逻辑风险" / "数据/安全风险"
+- Q3: "需求明确" / "部分待定" / "需求模糊→强制L3"
 
 ### Lite Approval Pack (L1)
 
 For L1 tasks, present a compact pack before entering J-Lite:
 
+- **Classifier line** (required, see above)
 - `reframed_goal`: the change you now believe the user actually wants
 - `retained_scope`: what will be delivered
 - `excluded_scope`: what will NOT be delivered
@@ -46,13 +58,17 @@ For L1 tasks, present a compact pack before entering J-Lite:
 
 For L2 tasks, the Lite pack plus:
 
+- **Classifier line** (required, see above)
 - `critical_assumptions`: assumptions that materially affect semantics
 - `key_non_goals`: what is explicitly out of scope
 - `risk_register`: top 3 risks with mitigation notes
 
 ### Full Approval Pack (L3)
 
-Unchanged from v1.0 — the complete 5-field pack (reframed_goal, retained_scope, excluded_scope, critical_assumptions, frozen_for_code) with full semantic coverage. For L3, also include scenario_fragments and blocking_unknowns from Stage A full output.
+For L3 tasks:
+
+- **Classifier line** (required, see above)
+- Unchanged from v1.0 — the complete 5-field pack (reframed_goal, retained_scope, excluded_scope, critical_assumptions, frozen_for_code) with full semantic coverage. For L3, also include scenario_fragments and blocking_unknowns from Stage A full output.
 
 ## Exit Rule
 

@@ -1,6 +1,9 @@
 # ECD v1.1 使用指南
 
 > 演进约束开发 (Evolutionary Constraint Development) — 从模糊需求到可运行代码的完整闭环
+>
+> 🆕 **第一次接触 ECD？** 先读 [`docs/zh-CN/beginners-guide.md`](docs/zh-CN/beginners-guide.md) —— 专为零基础用户编写的入门指南。
+> 本文档是完整参考手册，适合已经了解基本概念的用户。
 
 ## 目录
 
