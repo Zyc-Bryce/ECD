@@ -44,7 +44,7 @@ Choose one of the methods below.
 ### Method 1: npx One-Liner (⭐ Easiest)
 
 ```bash
-npx @zyc-bryce/ecd
+npx ecd-claude-code
 ```
 
 Auto-configures Claude Code. Restart and you're done. No manual file editing.
