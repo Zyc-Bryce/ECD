@@ -104,7 +104,7 @@
 如果没安装：
 ```powershell
 # 克隆到 skills 目录
-git clone https://github.com/Zyc-Bryce/evolutionary-constraint-development.git $env:USERPROFILE\.claude\skills\evolutionary-constraint-development
+git clone https://github.com/Zyc-Bryce/ECD.git $env:USERPROFILE\.claude\skills\evolutionary-constraint-development
 ```
 
 ### 第 1 步：提出需求

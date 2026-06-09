@@ -49,7 +49,7 @@
 
 ```powershell
 # 克隆仓库
-git clone https://github.com/Zyc-Bryce/evolutionary-constraint-development.git
+git clone https://github.com/Zyc-Bryce/ECD.git evolutionary-constraint-development
 
 # --- 用户级安装（在所有项目中可用）---
 Copy-Item -Recurse evolutionary-constraint-development $env:USERPROFILE\.claude\skills\
@@ -63,7 +63,7 @@ Copy-Item -Recurse evolutionary-constraint-development .\.claude\skills\
 
 ```bash
 # 克隆仓库
-git clone https://github.com/Zyc-Bryce/evolutionary-constraint-development.git
+git clone https://github.com/Zyc-Bryce/ECD.git evolutionary-constraint-development
 
 # 用户级安装（在所有项目中可用）
 cp -r evolutionary-constraint-development ~/.claude/skills/
@@ -76,10 +76,10 @@ cp -r evolutionary-constraint-development /path/to/your-project/.claude/skills/
 
 ```bash
 # Windows (PowerShell):
-git clone https://github.com/Zyc-Bryce/evolutionary-constraint-development.git $env:USERPROFILE\.claude\skills\evolutionary-constraint-development
+git clone https://github.com/Zyc-Bryce/ECD.git $env:USERPROFILE\.claude\skills\evolutionary-constraint-development
 
 # macOS / Linux:
-git clone https://github.com/Zyc-Bryce/evolutionary-constraint-development.git ~/.claude/skills/evolutionary-constraint-development
+git clone https://github.com/Zyc-Bryce/ECD.git ~/.claude/skills/evolutionary-constraint-development
 ```
 
 安装后，下次在对应目录中启动 Claude Code 时，技能就会被自动发现并加载。
@@ -92,7 +92,7 @@ git clone https://github.com/Zyc-Bryce/evolutionary-constraint-development.git ~
 
 #### 第 1 步 — 下载
 
-访问 https://github.com/Zyc-Bryce/evolutionary-constraint-development ，点击 **Code → Download ZIP** 下载压缩包，然后解压到你选择的目录。
+访问 https://github.com/Zyc-Bryce/ECD ，点击 **Code → Download ZIP** 下载压缩包，然后解压到你选择的目录。
 
 **示例：** 解压到 `C:\Users\Alice\Downloads\evolutionary-constraint-development`。
 
@@ -141,7 +141,7 @@ git clone https://github.com/Zyc-Bryce/evolutionary-constraint-development.git ~
 
 ### 方式三：手动安装（macOS / Linux，无需终端）
 
-1. 访问 https://github.com/Zyc-Bryce/evolutionary-constraint-development ，点击 **Code → Download ZIP**。
+1. 访问 https://github.com/Zyc-Bryce/ECD ，点击 **Code → Download ZIP**。
 2. 将 ZIP 解压到某个目录（例如 `~/Downloads/evolutionary-constraint-development`）。
 3. 打开 Finder（macOS）或文件管理器（Linux），启用"显示隐藏文件"以便看到 `.claude` 文件夹。
 4. **用户级安装：** 将解压后的文件夹复制到 `~/.claude/skills/`。如果 `~/.claude/` 下没有 `skills/`，先创建它。

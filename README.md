@@ -46,7 +46,7 @@ Choose one of the methods below. All examples use **Alice** as the Windows usern
 
 ```powershell
 # Clone the repository
-git clone https://github.com/Zyc-Bryce/evolutionary-constraint-development.git
+git clone https://github.com/Zyc-Bryce/ECD.git evolutionary-constraint-development
 
 # --- User-level install (available in every project) ---
 Copy-Item -Recurse evolutionary-constraint-development $env:USERPROFILE\.claude\skills\
@@ -60,7 +60,7 @@ Copy-Item -Recurse evolutionary-constraint-development .\.claude\skills\
 
 ```bash
 # Clone the repository
-git clone https://github.com/Zyc-Bryce/evolutionary-constraint-development.git
+git clone https://github.com/Zyc-Bryce/ECD.git evolutionary-constraint-development
 
 # User-level install (available in every project)
 cp -r evolutionary-constraint-development ~/.claude/skills/
@@ -73,10 +73,10 @@ cp -r evolutionary-constraint-development /path/to/your-project/.claude/skills/
 
 ```bash
 # Windows (PowerShell):
-git clone https://github.com/Zyc-Bryce/evolutionary-constraint-development.git $env:USERPROFILE\.claude\skills\evolutionary-constraint-development
+git clone https://github.com/Zyc-Bryce/ECD.git $env:USERPROFILE\.claude\skills\evolutionary-constraint-development
 
 # macOS / Linux:
-git clone https://github.com/Zyc-Bryce/evolutionary-constraint-development.git ~/.claude/skills/evolutionary-constraint-development
+git clone https://github.com/Zyc-Bryce/ECD.git ~/.claude/skills/evolutionary-constraint-development
 ```
 
 After installation, the skill is automatically discovered the next time you start Claude Code in the relevant directory.
@@ -89,7 +89,7 @@ If you prefer to avoid the command line, follow these steps.
 
 #### Step 1 — Download
 
-Visit https://github.com/Zyc-Bryce/evolutionary-constraint-development and click **Code → Download ZIP**. Extract the ZIP to a folder of your choice.
+Visit https://github.com/Zyc-Bryce/ECD and click **Code → Download ZIP**. Extract the ZIP to a folder of your choice.
 
 **Example:** Extract to `C:\Users\Alice\Downloads\evolutionary-constraint-development`.
 
@@ -138,7 +138,7 @@ After either option, restart Claude Code (or start it in the relevant project di
 
 ### Method 3: Manual Install (macOS / Linux, No Terminal)
 
-1. Visit https://github.com/Zyc-Bryce/evolutionary-constraint-development and click **Code → Download ZIP**.
+1. Visit https://github.com/Zyc-Bryce/ECD and click **Code → Download ZIP**.
 2. Extract the ZIP to a folder (e.g., `~/Downloads/evolutionary-constraint-development`).
 3. Open Finder (macOS) or your file manager (Linux). Enable "Show Hidden Files" so the `.claude` folder is visible.
 4. **User-level:** Copy the extracted folder into `~/.claude/skills/`. Create `skills/` inside `~/.claude/` if it doesn't exist.
