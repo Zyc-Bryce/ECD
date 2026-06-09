@@ -207,6 +207,77 @@ git clone https://github.com/Zyc-Bryce/ECD.git ~/.claude/skills/evolutionary-con
 4. **用户级安装：** 将解压后的文件夹复制到 `~/.claude/skills/`。如果 `~/.claude/` 下没有 `skills/`，先创建它。
 5. **项目级安装：** 将解压后的文件夹复制到 `<你的项目>/.claude/skills/`。
 
+---
+
+## 卸载方式
+
+以下四种方式**对应上述四种安装方式**，选择与你安装方式匹配的即可。
+
+---
+
+### 方式一：npx 安装的卸载
+
+npx 安装的本质是在 `settings.json` 中注册了 marketplace 和插件。卸载只需移除这两处。
+
+1. 打开 `settings.json`（路径见上方[方式二](#方式二plugin-安装推荐)第 1 步）
+2. 在 `extraKnownMarketplaces` 中删除 `"ecd-marketplace"` 条目
+3. 在 `enabledPlugins` 中删除 `"ecd@ecd-marketplace"` 条目
+4. 重启 Claude Code
+
+> 💡 如果 `extraKnownMarketplaces` 或 `enabledPlugins` 在删除后变为空对象 `{}`，可保留空对象或整行删除。
+
+---
+
+### 方式二：/plugin 安装的卸载
+
+在 Claude Code 终端中执行：
+
+```bash
+# 禁用插件
+claude plugins disable ecd@ecd-marketplace
+
+# 移除 marketplace 源
+claude plugins source remove ecd-marketplace
+```
+
+或手动编辑 `settings.json`（同方式一卸载步骤），重启 Claude Code 即可。
+
+---
+
+### 方式三/四：手动/命令行安装的卸载
+
+直接删除 skills 目录中的 ECD 文件夹：
+
+```powershell
+# Windows (PowerShell) — 用户级
+Remove-Item -Recurse -Force $env:USERPROFILE\.claude\skills\evolutionary-constraint-development
+
+# Windows (PowerShell) — 项目级（在项目根目录执行）
+Remove-Item -Recurse -Force .\.claude\skills\evolutionary-constraint-development
+```
+
+```bash
+# macOS / Linux — 用户级
+rm -rf ~/.claude/skills/evolutionary-constraint-development
+
+# macOS / Linux — 项目级
+rm -rf /path/to/your-project/.claude/skills/evolutionary-constraint-development
+```
+
+---
+
+### 补充：npm 全局安装的卸载
+
+如果你曾通过 `npm install -g @zyc-bryce/ecd` 全局安装：
+
+```bash
+npm uninstall -g @zyc-bryce/ecd
+```
+
+> ⚠️ **注意**：npm 卸载仅移除 npm 全局包本身，不会自动清理 `settings.json` 中的 marketplace/plugin 注册。如果之前也通过 npx 注册过，仍需按方式一清理 `settings.json`。
+
+---
+
 ## CLI 快速开始
 
 CLI 本身是薄工具层，负责渲染、校验和记录。真正的推理行为仍由遵循这个 Skill 的模型承担。

@@ -1,12 +1,34 @@
 # ECD 更新说明
 
-> v1.3：自我进化 — 修复版本号不一致 + Schema L1 依赖链断裂 + 中文本地化补齐 12 篇 reference
+> v1.3：自我进化 — 修复版本号不一致 + Schema L1 依赖链断裂 + 中文本地化补齐 12 篇 reference + 卸载方式文档
 > v1.2：基于 50 任务深度验证，四项精准优化冲刺 90 分成熟度 + 插件标准化
 > v1.1：基于 5 任务对比分析，修复 v1.0 三大核心问题
 
 ---
 
-## v1.3 更新说明 `[2026-06-09]`
+## v1.3.1 更新说明 `[2026-06-09]`
+
+### 文档完善
+
+- **新增** README.zh-CN.md 卸载章节，覆盖全部四种安装方式的对应卸载方法
+  - npx 安装 → 手动清理 settings.json
+  - /plugin 安装 → `claude plugins disable` + `source remove`
+  - 手动/命令行安装 → 直接删除 skills 目录
+  - npm 全局安装 → `npm uninstall -g @zyc-bryce/ecd` + settings.json 清理提示
+
+### v1.3.1 文件变更
+
+| 文件 | 变更 |
+|------|------|
+| `README.zh-CN.md` | 新增卸载方式章节 |
+| `package.json` | version 1.3.0 → 1.3.1 |
+| `.claude-plugin/plugin.json` | version 1.3.0 → 1.3.1 |
+| `.claude-plugin/marketplace.json` | version 1.3.0 → 1.3.1 |
+| `CHANGELOG.zh-CN.md` | 追加 v1.3.1 条目 |
+
+---
+
+## v1.3.0 更新说明 `[2026-06-09]`
 
 ### 自我进化：ECD 用 ECD 方法论进化自身
 

@@ -1,6 +1,6 @@
 {
   "name": "ecd",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "演进约束开发 (Evolutionary Constraint Development) — 先冻结产品含义，再把交付压进一个有约束的 pre-plan-code-achieve 闭环。复杂度自适应（L1/L2/L3 三级路由），含独立子Agent 审查和红蓝对抗。",
   "author": {
     "name": "Zyc-Bryce",
