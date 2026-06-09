@@ -4,7 +4,7 @@
  * ECD (Evolutionary Constraint Development) — npx 一键安装脚本
  *
  * 用法:
- *   npx ecd-claude-code
+ *   npx @zyc-bryce/ecd
  *
  * 自动在 Claude Code 的 settings.json 中注册 ECD marketplace 并启用插件。
  * 无需管理员权限，不修改任何项目文件，仅编辑 ~/.claude/settings.json。

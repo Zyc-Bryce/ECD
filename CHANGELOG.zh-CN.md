@@ -14,11 +14,11 @@ ECD 现已符合 Claude Code 插件标准，安装方式从"手动复制文件"�
 - **新增** `.claude-plugin/plugin.json` — 插件元数据定义
 - **新增** `.claude-plugin/marketplace.json` — 自引用 marketplace
 - **新增** `package.json` — 支持 `npm`/`npx` 安装
-- **新增** `bin/install.js` — `npx ecd-claude-code` 一键安装脚本（自动配置 settings.json）
+- **新增** `bin/install.js` — `npx @zyc-bryce/ecd` 一键安装脚本（自动配置 settings.json）
 - **目录重构**：`SKILL.md` + `references/` + `docs/` + `agents/` + `scripts/` + `templates/` + `schemas/` → `skills/ecd/`（符合插件标准结构）
 - **安装方式**：
   - ⭐ `/plugin marketplace add Zyc-Bryce/ECD` → `/plugin install ecd@ecd-marketplace`
-  - `npm install ecd-claude-code`
+  - `npm install @zyc-bryce/ecd`
   - 手动 `git clone`（保留）
 - **文档更新**：README（中英）、小白指南均已将插件方式列为推荐安装方式
 
