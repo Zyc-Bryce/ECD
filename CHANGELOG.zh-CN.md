@@ -13,7 +13,12 @@ ECD 现已符合 Claude Code 插件标准，安装方式从"手动复制文件"�
 
 - **新增** `.claude-plugin/plugin.json` — 插件元数据定义
 - **新增** `.claude-plugin/marketplace.json` — 自引用 marketplace
-- **安装方式**：在 `settings.json` 中加几行配置 → 自动下载 + 自动更新
+- **新增** `package.json` — 支持 `npm`/`npx` 安装
+- **目录重构**：`SKILL.md` + `references/` + `docs/` + `agents/` + `scripts/` + `templates/` + `schemas/` → `skills/ecd/`（符合插件标准结构）
+- **安装方式**：
+  - ⭐ `/plugin marketplace add Zyc-Bryce/ECD` → `/plugin install ecd@ecd-marketplace`
+  - `npm install @zyc-bryce/ecd`
+  - 手动 `git clone`（保留）
 - **文档更新**：README（中英）、小白指南均已将插件方式列为推荐安装方式
 
 > 基于[50任务深度验证报告](../../ECD调试报告.md)，实施四项精准优化，成熟度从 88% → 91.5%。

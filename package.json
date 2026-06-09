@@ -1,0 +1,44 @@
+{
+  "name": "@zyc-bryce/ecd",
+  "version": "1.2.0",
+  "description": "演进约束开发 (Evolutionary Constraint Development) — Claude Code 技能。先冻结产品含义，再通过 pre-plan-code-achieve 闭环交付高质量代码。L1/L2/L3 三级复杂度自适应路由。",
+  "keywords": [
+    "claude-code",
+    "claude-code-plugin",
+    "claude-code-skill",
+    "skill",
+    "plugin",
+    "workflow",
+    "planning",
+    "code-review",
+    "security",
+    "constraint-driven",
+    "pre-plan-code-achieve",
+    "chinese"
+  ],
+  "author": {
+    "name": "Zyc-Bryce",
+    "url": "https://github.com/Zyc-Bryce"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Zyc-Bryce/ECD.git"
+  },
+  "homepage": "https://github.com/Zyc-Bryce/ECD#readme",
+  "bugs": {
+    "url": "https://github.com/Zyc-Bryce/ECD/issues"
+  },
+  "files": [
+    ".claude-plugin/",
+    "skills/",
+    "README.md",
+    "README.zh-CN.md",
+    "USAGE.zh-CN.md",
+    "CHANGELOG.zh-CN.md"
+  ],
+  "claudeCode": {
+    "marketplace": ".claude-plugin/marketplace.json",
+    "plugin": ".claude-plugin/plugin.json"
+  }
+}

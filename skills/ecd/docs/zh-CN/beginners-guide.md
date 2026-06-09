@@ -712,13 +712,13 @@ ECD 有一些术语听起来很学术。这里是它们的通俗解释：
 → [`docs/zh-CN/implementation.md`](implementation.md) — CLI流程、bundle编译、模板系统（15分钟阅读）
 
 ### 如果你想集成 Superpowers
-→ [`references/superpowers-integration.md`](../references/superpowers-integration.md) — ECD + Superpowers 互补工作流（10分钟阅读）
+→ [`references/superpowers-integration.md`](../../references/superpowers-integration.md) — ECD + Superpowers 互补工作流（10分钟阅读）
 
 ### 如果你想使用增量模式
-→ [`references/incremental-mode.md`](../references/incremental-mode.md) — 已有bundle的增量修改（10分钟阅读）
+→ [`references/incremental-mode.md`](../../references/incremental-mode.md) — 已有bundle的增量修改（10分钟阅读）
 
 ### 完整使用参考
-→ [`USAGE.zh-CN.md`](../../USAGE.zh-CN.md) — 完整使用指南（含所有场景和FAQ）
+→ [`USAGE.zh-CN.md`](../../../USAGE.zh-CN.md) — 完整使用指南（含所有场景和FAQ）
 
 ---
 

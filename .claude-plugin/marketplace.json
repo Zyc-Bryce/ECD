@@ -15,7 +15,7 @@
       "description": "演进约束开发 (Evolutionary Constraint Development) — pre-plan-code-achieve 闭环，L1/L2/L3 三级复杂度自适应路由",
       "version": "1.2.0",
       "strict": false,
-      "skills": ["./"],
+      "skills": ["./skills/ecd"],
       "homepage": "https://github.com/Zyc-Bryce/ECD"
     }
   ]

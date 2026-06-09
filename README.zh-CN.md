@@ -29,13 +29,14 @@
 
 ## 这个仓库包含什么
 
-- `SKILL.md`：Claude Code Skill 本体。
-- `scripts/`：用于 scaffold、render、validate、run 记录、achieve note 的 CLI 辅助脚本（Python，可选依赖 `pyyaml`）。
-- `templates/`：bundle 各类产物的 markdown 模板。
-- `schemas/`：normalized case 的结构说明。
-- `references/`：playbook、质量门槛、子代理协议（已适配 Claude Code）。
-- `docs/`：理论、阶段、子代理、实现细节文档（中英双语）。
-- `agents/`：Claude Code Agent 接口定义（D/G/H/J 强制子代理阶段）。
+- `skills/ecd/SKILL.md`：Claude Code Skill 本体。
+- `skills/ecd/scripts/`：用于 scaffold、render、validate、run 记录、achieve note 的 CLI 辅助脚本（Python，可选依赖 `pyyaml`）。
+- `skills/ecd/templates/`：bundle 各类产物的 markdown 模板。
+- `skills/ecd/schemas/`：normalized case 的结构说明。
+- `skills/ecd/references/`：playbook、质量门槛、子代理协议（已适配 Claude Code）。
+- `skills/ecd/docs/`：理论、阶段、子代理、实现细节文档（中英双语）。
+- `skills/ecd/agents/`：Claude Code Agent 接口定义（D/G/H/J 强制子代理阶段）。
+- `.claude-plugin/`：Claude Code 插件元数据（支持 `/plugin install`）。
 
 ## 安装方式
 
@@ -204,7 +205,7 @@ CLI 本身是薄工具层，负责渲染、校验和记录。真正的推理行�
 
 ```bash
 # macOS / Linux
-python3 scripts/ecl.py pre \
+python3 skills/ecd/scripts/ecl.py pre \
   --request "Build a minimal app with a dashboard, an empty state, and one write flow." \
   --output /home/alice/projects/ecd-demo/bundle \
   --repo-path /home/alice/projects/my-app \
@@ -213,7 +214,7 @@ python3 scripts/ecl.py pre \
 
 ```powershell
 # Windows (PowerShell)
-python scripts/ecl.py pre `
+python skills/ecd/scripts/ecl.py pre `
   --request "Build a minimal app with a dashboard, an empty state, and one write flow." `
   --output C:\Users\Alice\Projects\ecd-demo\bundle `
   --repo-path C:\Users\Alice\Projects\my-app `
@@ -226,7 +227,7 @@ python scripts/ecl.py pre `
 
 ```bash
 # macOS / Linux
-python3 scripts/ecl.py plan \
+python3 skills/ecd/scripts/ecl.py plan \
   --input-json /home/alice/projects/ecd-demo/case.json \
   --output /home/alice/projects/ecd-demo/bundle \
   --force
@@ -234,7 +235,7 @@ python3 scripts/ecl.py plan \
 
 ```powershell
 # Windows (PowerShell)
-python scripts/ecl.py plan `
+python skills/ecd/scripts/ecl.py plan `
   --input-json C:\Users\Alice\Projects\ecd-demo\case.json `
   --output C:\Users\Alice\Projects\ecd-demo\bundle `
   --force
@@ -246,14 +247,14 @@ python scripts/ecl.py plan `
 
 ```bash
 # macOS / Linux
-python3 scripts/ecl.py code \
+python3 skills/ecd/scripts/ecl.py code \
   --case /home/alice/projects/ecd-demo/bundle \
   --run-json /home/alice/projects/ecd-demo/run.json
 ```
 
 ```powershell
 # Windows (PowerShell)
-python scripts/ecl.py code `
+python skills/ecd/scripts/ecl.py code `
   --case C:\Users\Alice\Projects\ecd-demo\bundle `
   --run-json C:\Users\Alice\Projects\ecd-demo\run.json
 ```
@@ -264,12 +265,12 @@ python scripts/ecl.py code `
 
 ```bash
 # macOS / Linux
-python3 scripts/ecl.py achieve --case /home/alice/projects/ecd-demo/bundle
+python3 skills/ecd/scripts/ecl.py achieve --case /home/alice/projects/ecd-demo/bundle
 ```
 
 ```powershell
 # Windows (PowerShell)
-python scripts/ecl.py achieve --case C:\Users\Alice\Projects\ecd-demo\bundle
+python skills/ecd/scripts/ecl.py achieve --case C:\Users\Alice\Projects\ecd-demo\bundle
 ```
 
 ### 直接校验
@@ -278,12 +279,12 @@ python scripts/ecl.py achieve --case C:\Users\Alice\Projects\ecd-demo\bundle
 
 ```bash
 # macOS / Linux
-python3 scripts/validate_ecl_bundle.py /home/alice/projects/ecd-demo/bundle
+python3 skills/ecd/scripts/validate_ecl_bundle.py /home/alice/projects/ecd-demo/bundle
 ```
 
 ```powershell
 # Windows (PowerShell)
-python scripts/validate_ecl_bundle.py C:\Users\Alice\Projects\ecd-demo\bundle
+python skills/ecd/scripts/validate_ecl_bundle.py C:\Users\Alice\Projects\ecd-demo\bundle
 ```
 
 ## Claude Code 侧的必要能力
@@ -299,16 +300,16 @@ python scripts/validate_ecl_bundle.py C:\Users\Alice\Projects\ecd-demo\bundle
 
 ## 仓库导览
 
-- **[docs/zh-CN/beginners-guide.md](docs/zh-CN/beginners-guide.md)：🆕 小白入门完全指南**——零基础也能看懂，5 分钟理解 ECD，含决策树、场景速查、常见错误、20 个 FAQ、术语词典
-- [USAGE.zh-CN.md](USAGE.zh-CN.md)：**v1.1 详细使用指南**——复杂度分类器、三级工作流、Superpowers 集成、增量模式、常见场景与 FAQ
-- [docs/zh-CN/theory.md](docs/zh-CN/theory.md)：ECD 的理论源头、定位和要解决的问题
-- [docs/zh-CN/stages.md](docs/zh-CN/stages.md)：每个阶段的职责、输入输出、exit gate 和失败方式
-- [docs/zh-CN/subagents.md](docs/zh-CN/subagents.md)：哪些阶段必须启用真实子代理、返回协议是什么
-- [docs/zh-CN/implementation.md](docs/zh-CN/implementation.md)：CLI 流程、bundle 编译、模板、schema 与 OpenSpec 输出
-- [docs/theory.md](docs/theory.md)：English theory documentation
-- [docs/stages.md](docs/stages.md)：English stage model
-- [docs/subagents.md](docs/subagents.md)：English subagent protocol
-- [docs/implementation.md](docs/implementation.md)：English implementation notes
+- **[skills/ecd/docs/zh-CN/beginners-guide.md](skills/ecd/docs/zh-CN/beginners-guide.md)：🆕 小白入门完全指南**——零基础也能看懂，5 分钟理解 ECD，含决策树、场景速查、常见错误、20 个 FAQ、术语词典
+- [USAGE.zh-CN.md](USAGE.zh-CN.md)：**详细使用指南**——复杂度分类器、三级工作流、Superpowers 集成、增量模式、常见场景与 FAQ
+- [skills/ecd/docs/zh-CN/theory.md](skills/ecd/docs/zh-CN/theory.md)：ECD 的理论源头、定位和要解决的问题
+- [skills/ecd/docs/zh-CN/stages.md](skills/ecd/docs/zh-CN/stages.md)：每个阶段的职责、输入输出、exit gate 和失败方式
+- [skills/ecd/docs/zh-CN/subagents.md](skills/ecd/docs/zh-CN/subagents.md)：哪些阶段必须启用真实子代理、返回协议是什么
+- [skills/ecd/docs/zh-CN/implementation.md](skills/ecd/docs/zh-CN/implementation.md)：CLI 流程、bundle 编译、模板、schema 与 OpenSpec 输出
+- [skills/ecd/docs/theory.md](skills/ecd/docs/theory.md)：English theory documentation
+- [skills/ecd/docs/stages.md](skills/ecd/docs/stages.md)：English stage model
+- [skills/ecd/docs/subagents.md](skills/ecd/docs/subagents.md)：English subagent protocol
+- [skills/ecd/docs/implementation.md](skills/ecd/docs/implementation.md)：English implementation notes
 
 ## 致谢
 

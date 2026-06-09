@@ -9,10 +9,10 @@
   "repository": "https://github.com/Zyc-Bryce/ECD",
   "homepage": "https://github.com/Zyc-Bryce/ECD#readme",
   "skills": [
-    "./"
+    "./skills/ecd"
   ],
   "agents": [
-    "./agents/claude-code.md"
+    "./skills/ecd/agents/claude-code.md"
   ],
   "tags": ["workflow", "planning", "code-review", "security", "chinese"]
 }

@@ -26,13 +26,14 @@ The core idea is simple: planning owns meaning, coding owns execution, and closu
 
 ## What This Repository Contains
 
-- `SKILL.md`: the Claude Code skill definition.
-- `scripts/`: CLI helpers for scaffold, render, validate, run recording, and achieve notes (Python, dependency: `pyyaml` for optional YAML parsing).
-- `templates/`: markdown templates for bundle artifacts and stage notes.
-- `schemas/`: structured schema guidance for the normalized case format.
-- `references/`: playbooks, quality bars, and subagent protocol adapted for Claude Code.
-- `docs/`: technical documentation for the theory, stages, subagents, and implementation (English + 简体中文).
-- `agents/`: Claude Code agent interface definitions for mandatory subagent stages (D/G/H/J).
+- `skills/ecd/SKILL.md`: the Claude Code skill definition.
+- `skills/ecd/scripts/`: CLI helpers for scaffold, render, validate, run recording, and achieve notes (Python, dependency: `pyyaml` for optional YAML parsing).
+- `skills/ecd/templates/`: markdown templates for bundle artifacts and stage notes.
+- `skills/ecd/schemas/`: structured schema guidance for the normalized case format.
+- `skills/ecd/references/`: playbooks, quality bars, and subagent protocol adapted for Claude Code.
+- `skills/ecd/docs/`: technical documentation for the theory, stages, subagents, and implementation (English + 简体中文).
+- `skills/ecd/agents/`: Claude Code agent interface definitions for mandatory subagent stages (D/G/H/J).
+- `.claude-plugin/`: Claude Code plugin metadata (supports `/plugin install`).
 
 ## Installation
 
