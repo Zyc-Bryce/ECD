@@ -40,11 +40,23 @@
 
 ## 安装方式
 
-以下三种方式**任选其一**即可。所有示例以 **Alice** 作为 Windows 用户名、**my-app** 作为项目名——请替换为你自己的。
+以下四种方式**任选其一**即可。
 
 ---
 
-### 方式一：插件安装（⭐ 推荐）
+### 方式一：npx 一键安装（⭐ 最简）
+
+```bash
+npx @zyc-bryce/ecd
+```
+
+自动配置 Claude Code，重启即可使用。无需手动编辑任何文件。
+
+> 🟡 需要先发布到 npm。在此之前，请使用方式二。
+
+---
+
+### 方式二：/plugin 安装（⭐ 推荐）
 
 只需在 Claude Code 的配置文件中加几行，自动下载、自动更新，无需手动管理文件。
 
@@ -87,7 +99,7 @@
 
 ---
 
-### 方式二：命令行安装
+### 方式三：命令行安装
 
 适合习惯命令行的用户。本质是克隆仓库 → 复制到 skills 目录。
 
@@ -132,7 +144,7 @@ git clone https://github.com/Zyc-Bryce/ECD.git ~/.claude/skills/evolutionary-con
 
 ---
 
-### 方式三：手动安装（无需终端）
+### 方式四：手动安装（无需终端）
 
 如果你不想使用命令行，可以按以下步骤手动操作。
 
@@ -185,7 +197,7 @@ git clone https://github.com/Zyc-Bryce/ECD.git ~/.claude/skills/evolutionary-con
 
 ---
 
-### 方式三：手动安装（macOS / Linux，无需终端）
+### 方式四：手动安装（macOS / Linux，无需终端）
 
 1. 访问 https://github.com/Zyc-Bryce/ECD ，点击 **Code → Download ZIP**。
 2. 将 ZIP 解压到某个目录（例如 `~/Downloads/evolutionary-constraint-development`）。

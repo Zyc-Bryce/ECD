@@ -37,7 +37,23 @@ The core idea is simple: planning owns meaning, coding owns execution, and closu
 
 ## Installation
 
-Choose one of the methods below. All examples use **Alice** as the Windows username and **my-app** as the project name — replace them with your own.
+Choose one of the methods below.
+
+---
+
+### Method 1: npx One-Liner (⭐ Easiest)
+
+```bash
+npx @zyc-bryce/ecd
+```
+
+Auto-configures Claude Code. Restart and you're done. No manual file editing.
+
+> 🟡 Requires npm publishing first. Until then, use Method 2.
+
+---
+
+### Method 2: /plugin Install (⭐ Recommended)
 
 ---
 
