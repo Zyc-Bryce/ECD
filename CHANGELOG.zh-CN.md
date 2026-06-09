@@ -6,6 +6,27 @@
 
 ---
 
+## v1.3.2 更新说明 `[2026-06-09]`
+
+### 安装体验优化
+
+- **改进** `bin/install.js`：安装/更新完成后显示版本号 + 验证方法
+  - 标题栏展示当前版本（如 `v1.3.2`）
+  - 完成提示中明确写出 `claude plugin list` 版本验证命令
+- 用户执行 `npx @zyc-bryce/ecd` 后可立即确认版本，不再困惑"我更新成功了吗"
+
+### v1.3.2 文件变更
+
+| 文件 | 变更 |
+|------|------|
+| `bin/install.js` | 读取并展示 package.json 版本号；完成提示增加版本验证说明 |
+| `package.json` | version 1.3.1 → 1.3.2 |
+| `.claude-plugin/plugin.json` | version 1.3.1 → 1.3.2 |
+| `.claude-plugin/marketplace.json` | version 1.3.1 → 1.3.2 |
+| `CHANGELOG.zh-CN.md` | 追加 v1.3.2 条目 |
+
+---
+
 ## v1.3.1 更新说明 `[2026-06-09]`
 
 ### 文档完善

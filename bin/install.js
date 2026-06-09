@@ -14,6 +14,16 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 
+// ── 版本号 ────────────────────────────────────────────
+const PKG_VERSION = (() => {
+  try {
+    const pkgPath = path.join(__dirname, '..', 'package.json');
+    return JSON.parse(fs.readFileSync(pkgPath, 'utf-8')).version || 'unknown';
+  } catch (_) {
+    return 'unknown';
+  }
+})();
+
 // ── 配置 ──────────────────────────────────────────────
 const MARKETPLACE_NAME = 'ecd-marketplace';
 const MARKETPLACE_SOURCE = { source: 'github', repo: 'Zyc-Bryce/ECD' };
@@ -54,11 +64,11 @@ function writeSettings(filePath, data) {
 function main() {
   const header = `
   ╔══════════════════════════════════════════════╗
-  ║     ECD — 演进约束开发                        ║
+  ║     ECD — 演进约束开发           v${PKG_VERSION}     ║
   ║     Evolutionary Constraint Development       ║
   ╚══════════════════════════════════════════════╝
 
-  一键安装 Claude Code 插件…
+  正在配置 Claude Code 插件…
   `;
   console.log(header);
 
@@ -106,17 +116,21 @@ function main() {
   // ── 完成信息 ──
   console.log(`
   ┌──────────────────────────────────────────────┐
-  │  🎉 ECD 安装完成！                            │
+  │  🎉 ECD v${PKG_VERSION} 配置完成！                   │
   │                                              │
-  │  下一步:                                      │
+  │  下一步：                                     │
   │  1. 重启 Claude Code                          │
   │  2. 输入 /ecd 开始使用                         │
   │                                              │
-  │  卸载:                                        │
+  │  验证版本：                                   │
+  │  claude plugin list                          │
+  │  （查看 ecd@ecd-marketplace 的 Version 字段）  │
+  │                                              │
+  │  卸载：                                      │
   │  从 settings.json 中删除 ecd-marketplace       │
   │  和 ecd@ecd-marketplace 即可                  │
   │                                              │
-  │  文档: https://github.com/Zyc-Bryce/ECD       │
+  │  文档：https://github.com/Zyc-Bryce/ECD       │
   └──────────────────────────────────────────────┘
   `);
 }
