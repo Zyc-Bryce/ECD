@@ -10,15 +10,32 @@
 ![Constraint Planning](https://img.shields.io/badge/Planning-Constraint_Driven-0F766E?style=flat-square)
 ![CLI Toolkit](https://img.shields.io/badge/CLI-Toolkit-1D4ED8?style=flat-square)
 ![Plan Code Achieve](https://img.shields.io/badge/Workflow-Plan_Code_Achieve-7C3AED?style=flat-square)
+![License](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)
+![Version](https://img.shields.io/badge/version-1.3-blue?style=flat-square)
+![Python](https://img.shields.io/badge/Python-3.8+-green?style=flat-square)
 
 原始需求 → 冻结含义 → code-ready handoff → run evidence → achieve verdict
 
 </div>
 
+## 目录
+
+- [为什么用 ECD](#为什么用-ecd)
+- [这个仓库包含什么](#这个仓库包含什么)
+- [前置要求](#前置要求)
+- [安装方式](#安装方式)
+- [卸载方式](#卸载方式)
+- [CLI 快速开始](#cli-快速开始)
+- [Claude Code 侧的必要能力](#claude-code-侧的必要能力)
+- [仓库导览](#仓库导览)
+- [参与贡献](#参与贡献)
+- [致谢](#致谢)
+- [许可证](#许可证)
+
 `ecd`（Evolutionary Constraint Development，演进约束开发）是一套 Claude Code Skill。在 Claude Code 中输入 `/ecd` 即可调用。
 
 > **🆕 第一次用？** → [`skills/ecd/docs/zh-CN/beginners-guide.md`](skills/ecd/docs/zh-CN/beginners-guide.md) 小白入门完全指南（5 分钟看懂）
-> **v1.3 新特性：** 中文本地化补齐（12篇 reference 全文翻译）、版本号体系统一、Schema L1 依赖链修复。详见 [`USAGE.zh-CN.md`](USAGE.zh-CN.md)。
+> **v1.3 新特性：** 中文本地化补齐（12篇 reference 全文翻译）、版本号体系统一、Schema L1 依赖链修复。详见 [`USAGE.zh-CN.md`](USAGE.zh-CN.md)、[`CHANGELOG.zh-CN.md`](CHANGELOG.zh-CN.md)。
 
 1. `pre` — 追问和整理，直到需求语义足够冻结，可以进入审批门。
 2. `plan` — 让保留下来的路径收敛成一个 code-ready bundle。
@@ -26,6 +43,21 @@
 4. `achieve` — 判断结果是否真的满足验收，以及这个 case 是否可以归档关闭。
 
 它的核心原则很简单：规划负责冻结含义，编码负责忠实执行，闭环负责证明结果是否可接受。只要编码阶段还需要补产品语义，说明规划失败了。
+
+## 为什么用 ECD
+
+当你让 AI 编程助手基于一句模糊需求写代码时，通常的结果是一场**语义赌博**：模型猜你想要的，凭空发明产品行为，最终交付的代码看起来对，但跑起来错——缺失边界场景、状态转换错误、异常处理挂掉。
+
+ECD 会在一行代码被写出来之前就强制执行**语义冻结**：
+
+| 没有 ECD | 有了 ECD |
+|---|---|
+| "做一个后台面板" → 模型自行发明功能 | `pre` 追问到语义冻结 |
+| 代码偏离原始意图 | `plan` 收敛为 code-ready 交接包 |
+| 无法判断"做完了没有" | `code` 只执行冻结后的指令 |
+| "看着还行"式验收 | `achieve` 要求基于证据关闭 |
+
+核心原则很简单：**规划负责冻结含义，编码负责忠实执行，闭环负责证明结果是否可接受。** 只要编码阶段还需要补产品语义，说明规划失败了。
 
 ## 这个仓库包含什么
 
@@ -38,9 +70,16 @@
 - `skills/ecd/agents/`：Claude Code Agent 接口定义（D/G/H/J 强制子代理阶段）。
 - `.claude-plugin/`：Claude Code 插件元数据（支持 `/plugin install`）。
 
+## 前置要求
+
+- **Claude Code** — 建议使用最新版本。ECD 依赖 `Agent` 工具在关键审查阶段启动独立子代理。
+- **Python 3.8+** — 仅在使用 CLI 辅助脚本（`skills/ecd/scripts/`）时需要。所有脚本均使用 Python 标准库，仅有一项可选例外：
+  - **pyyaml**（可选）— `pip install pyyaml`。仅 `render_obsidian_bundle.py` 完整 YAML schema 解析时需要；未安装时脚本会自动回退到内置默认 schema。
+- **Git** — 仅通过 `git clone` 安装时需要（下方方式四和方式五）。
+
 ## 安装方式
 
-以下四种方式**任选其一**即可。
+以下五种方式**任选其一**即可。
 
 ---
 
@@ -52,13 +91,43 @@ npx @zyc-bryce/ecd
 
 自动配置 Claude Code（添加市场源 + 启用插件），重启即可使用。无需手动编辑任何文件。
 
-> 💡 此命令仅编辑 `settings.json`，效果等同于下方方式二的手动配置。
+> 💡 此命令仅编辑 `settings.json`，效果等同于下方方式三的手动配置。
 
 ---
 
-### 方式二：/plugin 安装（⭐ 推荐）
+### 方式二：插件命令安装（⭐ 推荐）
 
-只需在 Claude Code 的配置文件中加几行，自动下载、自动更新，无需手动管理文件。
+使用 Claude Code 内置插件系统——自动下载、自动更新，无需手动管理文件。
+
+#### 第 1 步 — 添加市场源
+
+在终端中运行：
+
+```bash
+claude plugin source add ecd-marketplace --source github --repo Zyc-Bryce/ECD
+```
+
+#### 第 2 步 — 安装插件
+
+启动 Claude Code，输入：
+
+```
+/plugin install ecd@ecd-marketplace
+```
+
+#### 第 3 步 — 重启 Claude Code
+
+关闭并重新打开 Claude Code。输入 `/ecd` 验证——如果看到 ECD 提示信息，安装成功。
+
+> ✅ **优势**：后续 ECD 发新版本时，Claude Code 会自动检测更新。你也无需手动管理文件。
+>
+> 🔧 **故障排查**：如果重启后 `/ecd` 没出现，在终端运行 `claude plugin list` 检查 ECD 插件状态。若显示 `failed to load` 及 "conflicting manifests" 错误，说明 `marketplace.json` 与 `plugin.json` 存在重复声明——请更新到最新版或参考 [GitHub Issues](https://github.com/Zyc-Bryce/ECD/issues)。
+
+---
+
+### 方式三：手动配置
+
+如果你更习惯直接编辑配置文件，按以下步骤操作。
 
 #### 第 1 步 — 打开配置文件
 
@@ -95,13 +164,11 @@ npx @zyc-bryce/ecd
 
 关闭并重新打开 Claude Code。输入 `/ecd` 验证——如果看到 ECD 提示信息，安装成功。
 
-> ✅ **优势**：后续 ECD 发新版本时，Claude Code 会自动检测更新。你也无需手动管理文件。
->
-> 🔧 **故障排查**：如果重启后 `/ecd` 没出现，在终端运行 `claude plugin list` 检查 ECD 插件状态。若显示 `failed to load` 及 "conflicting manifests" 错误，说明 `marketplace.json` 与 `plugin.json` 存在重复声明——请更新到最新版或参考 [GitHub Issues](https://github.com/Zyc-Bryce/ECD/issues)。
+> ✅ **优势**：同方式二——Claude Code 会自动检测更新。
 
 ---
 
-### 方式三：命令行安装
+### 方式四：命令行安装
 
 适合习惯命令行的用户。本质是克隆仓库 → 复制到 skills 目录。
 
@@ -146,7 +213,7 @@ git clone https://github.com/Zyc-Bryce/ECD.git ~/.claude/skills/evolutionary-con
 
 ---
 
-### 方式四：手动安装（无需终端，跨平台）
+### 方式五：手动安装（无需终端，跨平台）
 
 如果你不想使用命令行，可以按以下步骤手动操作。
 
@@ -211,7 +278,7 @@ git clone https://github.com/Zyc-Bryce/ECD.git ~/.claude/skills/evolutionary-con
 
 ## 卸载方式
 
-以下四种方式**对应上述四种安装方式**，选择与你安装方式匹配的即可。
+以下五种卸载方式**对应上述五种安装方式**，选择与你安装方式匹配的即可。
 
 ---
 
@@ -219,7 +286,7 @@ git clone https://github.com/Zyc-Bryce/ECD.git ~/.claude/skills/evolutionary-con
 
 npx 安装的本质是在 `settings.json` 中注册了 marketplace 和插件。卸载只需移除这两处。
 
-1. 打开 `settings.json`（路径见上方[方式二](#方式二plugin-安装推荐)第 1 步）
+1. 打开 `settings.json`（路径见上方[方式三](#方式三手动配置)第 1 步）
 2. 在 `extraKnownMarketplaces` 中删除 `"ecd-marketplace"` 条目
 3. 在 `enabledPlugins` 中删除 `"ecd@ecd-marketplace"` 条目
 4. 重启 Claude Code
@@ -228,9 +295,9 @@ npx 安装的本质是在 `settings.json` 中注册了 marketplace 和插件。�
 
 ---
 
-### 方式二：/plugin 安装的卸载
+### 方式二：插件命令安装的卸载
 
-在 Claude Code 终端中执行：
+在终端中执行：
 
 ```bash
 # 禁用插件
@@ -240,11 +307,17 @@ claude plugins disable ecd@ecd-marketplace
 claude plugins source remove ecd-marketplace
 ```
 
-或手动编辑 `settings.json`（同方式一卸载步骤），重启 Claude Code 即可。
+重启 Claude Code 即可。
 
 ---
 
-### 方式三/四：手动/命令行安装的卸载
+### 方式三：手动配置的卸载
+
+同方式一：在 `settings.json` 中移除 `ecd-marketplace` 和 `ecd@ecd-marketplace` 条目，重启 Claude Code 即可。
+
+---
+
+### 方式四/五：手动/命令行安装的卸载
 
 直接删除 skills 目录中的 ECD 文件夹：
 
@@ -385,6 +458,8 @@ python skills/ecd/scripts/validate_ecl_bundle.py C:\Users\Alice\Projects\ecd-dem
 
 ## 仓库导览
 
+### 文档
+
 - **[skills/ecd/docs/zh-CN/beginners-guide.md](skills/ecd/docs/zh-CN/beginners-guide.md)：🆕 小白入门完全指南**——零基础也能看懂，5 分钟理解 ECD，含决策树、场景速查、常见错误、20 个 FAQ、术语词典
 - [USAGE.zh-CN.md](USAGE.zh-CN.md)：**详细使用指南**——复杂度分类器、三级工作流、Superpowers 集成、增量模式、常见场景与 FAQ
 - [skills/ecd/docs/zh-CN/theory.md](skills/ecd/docs/zh-CN/theory.md)：ECD 的理论源头、定位和要解决的问题
@@ -395,6 +470,30 @@ python skills/ecd/scripts/validate_ecl_bundle.py C:\Users\Alice\Projects\ecd-dem
 - [skills/ecd/docs/stages.md](skills/ecd/docs/stages.md)：English stage model
 - [skills/ecd/docs/subagents.md](skills/ecd/docs/subagents.md)：English subagent protocol
 - [skills/ecd/docs/implementation.md](skills/ecd/docs/implementation.md)：English implementation notes
+- [skills/ecd/references/zh-CN/](skills/ecd/references/zh-CN/)：12 篇完全翻译的参考指南（v1.3 新增）
+
+### 核心
+
+- [skills/ecd/SKILL.md](skills/ecd/SKILL.md)：Claude Code Skill 本体
+- [skills/ecd/scripts/](skills/ecd/scripts/)：CLI 辅助脚本（纯 Python 标准库 + 可选 `pyyaml`）
+- [skills/ecd/templates/](skills/ecd/templates/)：markdown 模板（Lite 与 Full 双版）
+- [skills/ecd/schemas/](skills/ecd/schemas/)：normalized case 的结构说明
+- [skills/ecd/references/](skills/ecd/references/)：playbook、质量门槛、子代理协议
+- [skills/ecd/agents/](skills/ecd/agents/)：Claude Code Agent 接口定义
+
+### 元信息
+
+- [CHANGELOG.zh-CN.md](CHANGELOG.zh-CN.md)：版本历史与更新日志
+- [.claude-plugin/](.claude-plugin/)：Claude Code 插件元数据
+
+## 参与贡献
+
+欢迎贡献！参与方式：
+
+- **Bug 报告与功能建议**：在 [GitHub Issues](https://github.com/Zyc-Bryce/ECD/issues) 提交 issue
+- **Pull Request**：fork 仓库 → 创建 feature 分支 → 向 `main` 提交 PR
+- **文档改进**：修正、翻译、补充示例——全部欢迎
+- **提交 PR 前**：请确保 CLI 脚本基础校验可正常通过（`python skills/ecd/scripts/validate_ecl_bundle.py --help`）
 
 ## 致谢
 
