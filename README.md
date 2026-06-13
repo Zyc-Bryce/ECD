@@ -75,7 +75,7 @@ The core philosophy: **planning owns meaning, coding owns execution, and closure
 - **Claude Code** — latest version recommended. ECD relies on the `Agent` tool for spawning independent subagents during critical review stages.
 - **Python 3.8+** — required only if you use the CLI helper scripts (`skills/ecd/scripts/`). All scripts use only the Python standard library, with one optional exception:
   - **pyyaml** (optional) — `pip install pyyaml`. Only needed by `render_obsidian_bundle.py` for full YAML schema parsing; the script gracefully falls back to a built-in default schema without it.
-- **Git** — required only if you install via `git clone` (Methods 4 and 5 below).
+- **Git** — required only if you install via `git clone` (Methods 5 and 6 below).
 
 ## Installation
 
@@ -83,7 +83,17 @@ Choose one of the methods below.
 
 ---
 
-### Method 1: npx One-Liner (⭐ Easiest)
+### Method 1: npx skills add (⭐ Recommended)
+
+```bash
+npx skills add Zyc-Bryce/ECD --skill ecd -g
+```
+
+One command — auto-discovers and installs the skill globally. No manual steps.
+
+---
+
+### Method 2: npx One-Liner (⭐ Easiest)
 
 ```bash
 npx @zyc-bryce/ecd
@@ -91,11 +101,11 @@ npx @zyc-bryce/ecd
 
 Auto-configures Claude Code (adds marketplace + enables plugin). Restart and you're done. No manual file editing.
 
-> 💡 This command only edits `settings.json` — functionally equivalent to Method 3's manual configuration below.
+> 💡 This command only edits `settings.json` — functionally equivalent to Method 4's manual configuration below.
 
 ---
 
-### Method 2: Plugin Command (⭐ Recommended)
+### Method 3: Plugin Command (⭐ Recommended)
 
 Use Claude Code's built-in plugin system — auto-download, auto-update, no manual file management.
 
@@ -125,7 +135,7 @@ Close and reopen Claude Code. Type `/ecd` to verify — if you see the ECD promp
 
 ---
 
-### Method 3: Manual Config
+### Method 4: Manual Config
 
 Prefer to edit config files directly? Add a few lines to your Claude Code settings.
 
@@ -164,11 +174,11 @@ Add these entries to `settings.json`:
 
 Close and reopen Claude Code. Type `/ecd` to verify — if you see the ECD prompt, you're all set.
 
-> ✅ **Advantage**: Same as Method 2 — Claude Code will automatically detect new versions.
+> ✅ **Advantage**: Same as Method 3 — Claude Code will automatically detect new versions.
 
 ---
 
-### Method 4: Command-Line Install
+### Method 5: Command-Line Install
 
 #### Windows (PowerShell)
 
@@ -211,7 +221,7 @@ After installation, the skill is automatically discovered the next time you star
 
 ---
 
-### Method 5: Manual Install (No Terminal Required)
+### Method 6: Manual Install (No Terminal Required)
 
 If you prefer to avoid the command line, follow these steps.
 
@@ -278,11 +288,19 @@ Choose the method matching your installation.
 
 ---
 
-### Method 1: npx Install → Uninstall
+### Method 1: npx skills add → Uninstall
+
+```bash
+npx skills remove ecd -g
+```
+
+---
+
+### Method 2: npx Install → Uninstall
 
 The npx one-liner only edits `settings.json`. To undo:
 
-1. Open `settings.json` (see [Method 3](#method-3-manual-config) Step 1 for paths)
+1. Open `settings.json` (see [Method 4](#method-4-manual-config) Step 1 for paths)
 2. Remove the `"ecd-marketplace"` entry from `extraKnownMarketplaces`
 3. Remove the `"ecd@ecd-marketplace"` entry from `enabledPlugins`
 4. Restart Claude Code
@@ -291,7 +309,7 @@ The npx one-liner only edits `settings.json`. To undo:
 
 ---
 
-### Method 2: Plugin Command → Uninstall
+### Method 3: Plugin Command → Uninstall
 
 Run in terminal:
 
@@ -307,13 +325,13 @@ Restart Claude Code.
 
 ---
 
-### Method 3: Manual Config → Uninstall
+### Method 4: Manual Config → Uninstall
 
-Same as Method 1: remove the `ecd-marketplace` and `ecd@ecd-marketplace` entries from `settings.json`, then restart.
+Same as Method 2: remove the `ecd-marketplace` and `ecd@ecd-marketplace` entries from `settings.json`, then restart.
 
 ---
 
-### Method 4 / 5: Manual / Command-Line → Uninstall
+### Method 5 / 6: Manual / Command-Line → Uninstall
 
 Delete the ECD folder from your skills directory:
 
@@ -343,7 +361,7 @@ If you also installed via `npm install -g @zyc-bryce/ecd`:
 npm uninstall -g @zyc-bryce/ecd
 ```
 
-> ⚠️ **Note**: `npm uninstall -g` only removes the npm package — it does **not** clean up `settings.json`. If you also registered via npx or manual config, follow Method 1/3 to clean up `settings.json`.
+> ⚠️ **Note**: `npm uninstall -g` only removes the npm package — it does **not** clean up `settings.json`. If you also registered via npx or manual config, follow Method 2/4 to clean up `settings.json`.
 
 ---
 

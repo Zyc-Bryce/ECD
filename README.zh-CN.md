@@ -75,15 +75,25 @@ ECD 会在一行代码被写出来之前就强制执行**语义冻结**：
 - **Claude Code** — 建议使用最新版本。ECD 依赖 `Agent` 工具在关键审查阶段启动独立子代理。
 - **Python 3.8+** — 仅在使用 CLI 辅助脚本（`skills/ecd/scripts/`）时需要。所有脚本均使用 Python 标准库，仅有一项可选例外：
   - **pyyaml**（可选）— `pip install pyyaml`。仅 `render_obsidian_bundle.py` 完整 YAML schema 解析时需要；未安装时脚本会自动回退到内置默认 schema。
-- **Git** — 仅通过 `git clone` 安装时需要（下方方式四和方式五）。
+- **Git** — 仅通过 `git clone` 安装时需要（下方方式五和方式六）。
 
 ## 安装方式
 
-以下五种方式**任选其一**即可。
+以下六种方式**任选其一**即可。
 
 ---
 
-### 方式一：npx 一键安装（⭐ 最简）
+### 方式一：npx skills add（⭐ 推荐）
+
+```bash
+npx skills add Zyc-Bryce/ECD --skill ecd -g
+```
+
+一条命令全局安装，自动发现技能。无需任何手动操作。
+
+---
+
+### 方式二：npx 一键安装（⭐ 最简）
 
 ```bash
 npx @zyc-bryce/ecd
@@ -91,11 +101,11 @@ npx @zyc-bryce/ecd
 
 自动配置 Claude Code（添加市场源 + 启用插件），重启即可使用。无需手动编辑任何文件。
 
-> 💡 此命令仅编辑 `settings.json`，效果等同于下方方式三的手动配置。
+> 💡 此命令仅编辑 `settings.json`，效果等同于下方方式四的手动配置。
 
 ---
 
-### 方式二：插件命令安装（⭐ 推荐）
+### 方式三：插件命令安装（⭐ 推荐）
 
 使用 Claude Code 内置插件系统——自动下载、自动更新，无需手动管理文件。
 
@@ -125,7 +135,7 @@ claude plugin source add ecd-marketplace --source github --repo Zyc-Bryce/ECD
 
 ---
 
-### 方式三：手动配置
+### 方式四：手动配置
 
 如果你更习惯直接编辑配置文件，按以下步骤操作。
 
@@ -164,11 +174,11 @@ claude plugin source add ecd-marketplace --source github --repo Zyc-Bryce/ECD
 
 关闭并重新打开 Claude Code。输入 `/ecd` 验证——如果看到 ECD 提示信息，安装成功。
 
-> ✅ **优势**：同方式二——Claude Code 会自动检测更新。
+> ✅ **优势**：同方式三——Claude Code 会自动检测更新。
 
 ---
 
-### 方式四：命令行安装
+### 方式五：命令行安装
 
 适合习惯命令行的用户。本质是克隆仓库 → 复制到 skills 目录。
 
@@ -213,7 +223,7 @@ git clone https://github.com/Zyc-Bryce/ECD.git ~/.claude/skills/evolutionary-con
 
 ---
 
-### 方式五：手动安装（无需终端，跨平台）
+### 方式六：手动安装（无需终端，跨平台）
 
 如果你不想使用命令行，可以按以下步骤手动操作。
 
@@ -278,15 +288,23 @@ git clone https://github.com/Zyc-Bryce/ECD.git ~/.claude/skills/evolutionary-con
 
 ## 卸载方式
 
-以下五种卸载方式**对应上述五种安装方式**，选择与你安装方式匹配的即可。
+以下六种卸载方式**对应上述六种安装方式**，选择与你安装方式匹配的即可。
 
 ---
 
-### 方式一：npx 安装的卸载
+### 方式一：npx skills add 安装的卸载
+
+```bash
+npx skills remove ecd -g
+```
+
+---
+
+### 方式二：npx 安装的卸载
 
 npx 安装的本质是在 `settings.json` 中注册了 marketplace 和插件。卸载只需移除这两处。
 
-1. 打开 `settings.json`（路径见上方[方式三](#方式三手动配置)第 1 步）
+1. 打开 `settings.json`（路径见上方[方式四](#方式四手动配置)第 1 步）
 2. 在 `extraKnownMarketplaces` 中删除 `"ecd-marketplace"` 条目
 3. 在 `enabledPlugins` 中删除 `"ecd@ecd-marketplace"` 条目
 4. 重启 Claude Code
@@ -295,7 +313,7 @@ npx 安装的本质是在 `settings.json` 中注册了 marketplace 和插件。�
 
 ---
 
-### 方式二：插件命令安装的卸载
+### 方式三：插件命令安装的卸载
 
 在终端中执行：
 
@@ -311,13 +329,13 @@ claude plugins source remove ecd-marketplace
 
 ---
 
-### 方式三：手动配置的卸载
+### 方式四：手动配置的卸载
 
-同方式一：在 `settings.json` 中移除 `ecd-marketplace` 和 `ecd@ecd-marketplace` 条目，重启 Claude Code 即可。
+同方式二：在 `settings.json` 中移除 `ecd-marketplace` 和 `ecd@ecd-marketplace` 条目，重启 Claude Code 即可。
 
 ---
 
-### 方式四/五：手动/命令行安装的卸载
+### 方式五/六：手动/命令行安装的卸载
 
 直接删除 skills 目录中的 ECD 文件夹：
 
@@ -347,7 +365,7 @@ rm -rf /path/to/your-project/.claude/skills/evolutionary-constraint-development
 npm uninstall -g @zyc-bryce/ecd
 ```
 
-> ⚠️ **注意**：npm 卸载仅移除 npm 全局包本身，不会自动清理 `settings.json` 中的 marketplace/plugin 注册。如果之前也通过 npx 注册过，仍需按方式一清理 `settings.json`。
+> ⚠️ **注意**：npm 卸载仅移除 npm 全局包本身，不会自动清理 `settings.json` 中的 marketplace/plugin 注册。如果之前也通过 npx 注册过，仍需按方式二清理 `settings.json`。
 
 ---
 
