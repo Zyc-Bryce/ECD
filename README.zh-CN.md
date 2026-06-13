@@ -23,8 +23,7 @@
 - [为什么用 ECD](#为什么用-ecd)
 - [这个仓库包含什么](#这个仓库包含什么)
 - [前置要求](#前置要求)
-- [安装方式](#安装方式)
-- [卸载方式](#卸载方式)
+- [安装与卸载](#安装与卸载)
 - [CLI 快速开始](#cli-快速开始)
 - [Claude Code 侧的必要能力](#claude-code-侧的必要能力)
 - [仓库导览](#仓库导览)
@@ -77,69 +76,117 @@ ECD 会在一行代码被写出来之前就强制执行**语义冻结**：
   - **pyyaml**（可选）— `pip install pyyaml`。仅 `render_obsidian_bundle.py` 完整 YAML schema 解析时需要；未安装时脚本会自动回退到内置默认 schema。
 - **Git** — 仅通过 `git clone` 安装时需要（下方方式五和方式六）。
 
-## 安装方式
+## 安装与卸载
 
-以下六种方式**任选其一**即可。
+以下六种方式**任选其一**。每种方式自带对应的卸载方法，无需在别处查找。
 
 ---
 
 ### 方式一：npx skills add（⭐ 推荐）
 
+一条命令自动发现并安装技能。安装器将文件放入 `.agents/skills/ecd/`（通用技能目录，跨 Claude Code、Copilot、Cline 等平台共享），并自动创建 Junction 以便 Claude Code 立即发现。
+
+#### 安装
+
 ```bash
-npx skills add Zyc-Bryce/ECD --skill ecd -g
+npx skills add Zyc-Bryce/ECD
 ```
 
-一条命令全局安装，自动发现技能。无需任何手动操作。
+重启 Claude Code 后输入 `/ecd` 验证。
+
+> 🔧 **故障排查**：少数环境下 `.claude/skills/ecd` Junction 可能未自动生成。如果安装后 `/ecd` 未出现，检查并手动创建：
+>
+> **Windows (PowerShell):**
+> ```powershell
+> if (-not (Test-Path "$env:USERPROFILE\.claude\skills\ecd")) {
+>   New-Item -ItemType Junction -Path "$env:USERPROFILE\.claude\skills\ecd" -Target "$env:USERPROFILE\.agents\skills\ecd" -Force
+> }
+> ```
+>
+> **macOS / Linux:**
+> ```bash
+> [ ! -e ~/.claude/skills/ecd ] && ln -s ~/.agents/skills/ecd ~/.claude/skills/ecd
+> ```
+
+#### 卸载
+
+```bash
+npx skills remove ecd
+```
 
 ---
 
 ### 方式二：npx 一键安装（⭐ 最简）
 
+自动配置 Claude Code——注册市场源并启用插件。效果等同于下方方式四的手动配置，但无需手动编辑文件。
+
+#### 安装
+
 ```bash
 npx @zyc-bryce/ecd
 ```
 
-自动配置 Claude Code（添加市场源 + 启用插件），重启即可使用。无需手动编辑任何文件。
+重启 Claude Code 后输入 `/ecd` 验证。
 
-> 💡 此命令仅编辑 `settings.json`，效果等同于下方方式四的手动配置。
+> 💡 此命令仅编辑 `settings.json`——在 `extraKnownMarketplaces` 中添加 `ecd-marketplace`，在 `enabledPlugins` 中启用 `ecd@ecd-marketplace`。
+
+#### 卸载
+
+```bash
+npx @zyc-bryce/ecd --uninstall
+```
+
+自动从 `settings.json` 中移除 `ecd-marketplace` 与 `ecd@ecd-marketplace` 条目。重启 Claude Code 即可。
 
 ---
 
-### 方式三：插件命令安装（⭐ 推荐）
+### 方式三：插件命令安装
 
 使用 Claude Code 内置插件系统——自动下载、自动更新，无需手动管理文件。
 
-#### 第 1 步 — 添加市场源
+#### 安装
 
-在终端中运行：
+**第 1 步 — 添加市场源**（在终端中运行）：
 
 ```bash
 claude plugin source add ecd-marketplace --source github --repo Zyc-Bryce/ECD
 ```
 
-#### 第 2 步 — 安装插件
-
-启动 Claude Code，输入：
+**第 2 步 — 安装插件**（在 Claude Code 中输入）：
 
 ```
 /plugin install ecd@ecd-marketplace
 ```
 
-#### 第 3 步 — 重启 Claude Code
+**第 3 步 — 重启** Claude Code。输入 `/ecd` 验证。
 
-关闭并重新打开 Claude Code。输入 `/ecd` 验证——如果看到 ECD 提示信息，安装成功。
-
-> ✅ **优势**：后续 ECD 发新版本时，Claude Code 会自动检测更新。你也无需手动管理文件。
+> ✅ **优势**：后续 ECD 发新版本时，Claude Code 会自动检测更新。
 >
 > 🔧 **故障排查**：如果重启后 `/ecd` 没出现，在终端运行 `claude plugin list` 检查 ECD 插件状态。若显示 `failed to load` 及 "conflicting manifests" 错误，说明 `marketplace.json` 与 `plugin.json` 存在重复声明——请更新到最新版或参考 [GitHub Issues](https://github.com/Zyc-Bryce/ECD/issues)。
+
+#### 卸载
+
+在终端中执行：
+
+```bash
+# 禁用插件
+claude plugins disable ecd@ecd-marketplace
+
+# 移除 marketplace 源
+claude plugins source remove ecd-marketplace
+```
+
+重启 Claude Code 即可。
 
 ---
 
 ### 方式四：手动配置
 
-如果你更习惯直接编辑配置文件，按以下步骤操作。
+如果你更习惯直接编辑配置文件，按以下步骤操作。效果同方式二和方式三——Claude Code 会自动检测更新。
 
-#### 第 1 步 — 打开配置文件
+#### 安装
+
+**第 1 步 — 打开配置文件**
 
 | 系统 | 配置文件路径 |
 |------|-------------|
@@ -148,9 +195,9 @@ claude plugin source add ecd-marketplace --source github --repo Zyc-Bryce/ECD
 
 > 如果文件不存在，新建一个空 JSON 文件：`{}`
 
-#### 第 2 步 — 添加 ECD 市场源和启用插件
+**第 2 步 — 添加 ECD 市场源和启用插件**
 
-在 `settings.json` 中添加：
+在 `settings.json` 中添加（或合并到已有内容）：
 
 ```json
 {
@@ -170,190 +217,119 @@ claude plugin source add ecd-marketplace --source github --repo Zyc-Bryce/ECD
 
 > 💡 如果文件中已有 `extraKnownMarketplaces` 或 `enabledPlugins`，将新条目**合并进去**，不要覆盖已有内容。
 
-#### 第 3 步 — 重启 Claude Code
+**第 3 步 — 重启** Claude Code。输入 `/ecd` 验证。
 
-关闭并重新打开 Claude Code。输入 `/ecd` 验证——如果看到 ECD 提示信息，安装成功。
+#### 卸载
 
-> ✅ **优势**：同方式三——Claude Code 会自动检测更新。
+1. 打开 `settings.json`
+2. 移除 `extraKnownMarketplaces` 中的 `"ecd-marketplace"` 条目
+3. 移除 `enabledPlugins` 中的 `"ecd@ecd-marketplace"` 条目
+4. 重启 Claude Code
 
 ---
 
-### 方式五：命令行安装
+### 方式五：命令行安装（git clone + 复制）
 
-适合习惯命令行的用户。本质是克隆仓库 → 复制到 skills 目录。
+克隆仓库并复制到 skills 目录。
 
-#### Windows (PowerShell)
+#### 安装
 
+**先克隆到任意位置，再复制：**
+
+*Windows (PowerShell):*
 ```powershell
-# 克隆仓库
-git clone https://github.com/Zyc-Bryce/ECD.git evolutionary-constraint-development
-
-# --- 用户级安装（在所有项目中可用）---
-Copy-Item -Recurse evolutionary-constraint-development $env:USERPROFILE\.claude\skills\
-
-# --- 项目级安装（仅在当前项目中可用）---
-# 先切换到你的项目根目录，然后执行：
-Copy-Item -Recurse evolutionary-constraint-development .\.claude\skills\
-```
-
-#### macOS / Linux
-
-```bash
-# 克隆仓库
 git clone https://github.com/Zyc-Bryce/ECD.git evolutionary-constraint-development
 
 # 用户级安装（在所有项目中可用）
+Copy-Item -Recurse evolutionary-constraint-development $env:USERPROFILE\.claude\skills\
+
+# 项目级安装（在项目根目录执行）
+Copy-Item -Recurse evolutionary-constraint-development .\.claude\skills\
+```
+
+*macOS / Linux:*
+```bash
+git clone https://github.com/Zyc-Bryce/ECD.git evolutionary-constraint-development
+
+# 用户级安装
 cp -r evolutionary-constraint-development ~/.claude/skills/
 
-# 项目级安装（仅在当前项目中可用）
+# 项目级安装
 cp -r evolutionary-constraint-development /path/to/your-project/.claude/skills/
 ```
 
-#### 直接克隆到 skills 目录（所有平台）
+**或直接克隆到 skills 目录：**
 
 ```bash
-# Windows (PowerShell):
+# Windows (PowerShell)
 git clone https://github.com/Zyc-Bryce/ECD.git $env:USERPROFILE\.claude\skills\evolutionary-constraint-development
 
-# macOS / Linux:
+# macOS / Linux
 git clone https://github.com/Zyc-Bryce/ECD.git ~/.claude/skills/evolutionary-constraint-development
 ```
 
-安装后，下次在对应目录中启动 Claude Code 时，技能就会被自动发现并加载。
+安装后，下次启动 Claude Code 时技能会被自动发现并加载。
+
+#### 卸载
+
+直接删除 skills 目录中的 ECD 文件夹：
+
+*Windows (PowerShell):*
+```powershell
+# 用户级
+Remove-Item -Recurse -Force $env:USERPROFILE\.claude\skills\evolutionary-constraint-development
+
+# 项目级（在项目根目录执行）
+Remove-Item -Recurse -Force .\.claude\skills\evolutionary-constraint-development
+```
+
+*macOS / Linux:*
+```bash
+# 用户级
+rm -rf ~/.claude/skills/evolutionary-constraint-development
+
+# 项目级
+rm -rf /path/to/your-project/.claude/skills/evolutionary-constraint-development
+```
 
 ---
 
 ### 方式六：手动安装（无需终端，跨平台）
 
-如果你不想使用命令行，可以按以下步骤手动操作。
+下载 ZIP 压缩包，解压后复制到正确目录。
 
-#### 第 1 步 — 下载
+#### 安装
 
-访问 https://github.com/Zyc-Bryce/ECD ，点击 **Code → Download ZIP** 下载压缩包，然后解压到你选择的目录。
+**第 1 步 — 下载：** 访问 https://github.com/Zyc-Bryce/ECD → **Code → Download ZIP**。解压到你选择的目录（例如 `C:\Users\Alice\Downloads\evolutionary-constraint-development`）。
 
-**示例：** 解压到 `C:\Users\Alice\Downloads\evolutionary-constraint-development`。
+**第 2 步 — 选择安装范围并复制：**
 
-#### 第 2 步 — 选择安装范围
+<details>
+<summary><b>选项 A：用户级安装</b>（所有项目可用）—— 点击展开</summary>
 
-从下面两个选项中**任选其一**。（以下为 Windows 操作步骤，macOS/Linux 用户请参考下方独立小节。）
+1. 打开文件资源管理器，在地址栏输入 `%USERPROFILE%\.claude\skills\` 并回车。若 `skills` 文件夹不存在则新建。
+2. 将解压得到的 `evolutionary-constraint-development` 文件夹复制到 `skills\` 中。
+3. 复制完成后路径示例：`C:\Users\Alice\.claude\skills\evolutionary-constraint-development\SKILL.md`
 
-##### Windows 用户
+</details>
 
-**选项 A：用户级安装（技能在所有项目中都可用）**
+<details>
+<summary><b>选项 B：项目级安装</b>（仅当前项目可用）—— 点击展开</summary>
 
-1. 打开文件资源管理器，在地址栏输入 `%USERPROFILE%\.claude\skills\` 并回车。
+1. 导航到你的项目根目录（如 `C:\Users\Alice\Projects\my-app`）。
+2. 若 `.claude\skills\` 不存在则逐级新建。
+3. 将解压得到的文件夹复制到 `.claude\skills\` 中。
+4. 复制完成后路径示例：`C:\Users\Alice\Projects\my-app\.claude\skills\evolutionary-constraint-development\SKILL.md`
 
-   *以 Alice 为例，完整路径为：* `C:\Users\Alice\.claude\skills\`
+</details>
 
-2. 如果 `skills` 文件夹不存在，新建它：
-   - 右键 → **新建 → 文件夹**，命名为 `skills`。
+**macOS / Linux 用户：** 同理，将解压后的文件夹复制到 `~/.claude/skills/`（用户级）或 `<你的项目>/.claude/skills/`（项目级）。启用"显示隐藏文件"以看到 `.claude` 文件夹。
 
-3. 将第 1 步解压得到的 `evolutionary-constraint-development` 文件夹，复制（或移动）到 `skills\` 中。
+重启 Claude Code 后技能会被自动发现。
 
-   *复制完成后，路径应类似：* `C:\Users\Alice\.claude\skills\evolutionary-constraint-development\SKILL.md`
+#### 卸载
 
----
-
-**选项 B：项目级安装（技能仅在当前项目中可用）**
-
-1. 打开文件资源管理器，导航到你的项目根目录。
-
-   *例如：* `C:\Users\Alice\Projects\my-app`
-
-2. 在项目目录中，查看是否存在 `.claude` 文件夹。如果不存在，新建它：
-   - 右键 → **新建 → 文件夹**，命名为 `.claude`
-   - *Windows 可能会提示"必须键入文件名"——正常现象，确认即可。*
-
-3. 在 `.claude` 文件夹内，查看是否存在 `skills` 文件夹。如果不存在，新建 `skills`。
-
-4. 将第 1 步解压得到的 `evolutionary-constraint-development` 文件夹，复制（或移动）到 `.claude\skills\` 中。
-
-   *复制完成后，路径应类似：* `C:\Users\Alice\Projects\my-app\.claude\skills\evolutionary-constraint-development\SKILL.md`
-
----
-
-无论选择哪个选项，重启 Claude Code（或在对应项目目录中启动），技能就会被自动发现。
-
----
-
-#### macOS / Linux 用户
-
-1. 访问 https://github.com/Zyc-Bryce/ECD ，点击 **Code → Download ZIP**。
-2. 将 ZIP 解压到某个目录（例如 `~/Downloads/evolutionary-constraint-development`）。
-3. 打开 Finder（macOS）或文件管理器（Linux），启用"显示隐藏文件"以便看到 `.claude` 文件夹。
-4. **用户级安装：** 将解压后的文件夹复制到 `~/.claude/skills/`。如果 `~/.claude/` 下没有 `skills/`，先创建它。
-5. **项目级安装：** 将解压后的文件夹复制到 `<你的项目>/.claude/skills/`。
-
----
-
-## 卸载方式
-
-以下六种卸载方式**对应上述六种安装方式**，选择与你安装方式匹配的即可。
-
----
-
-### 方式一：npx skills add 安装的卸载
-
-```bash
-npx skills remove ecd -g
-```
-
----
-
-### 方式二：npx 安装的卸载
-
-npx 安装的本质是在 `settings.json` 中注册了 marketplace 和插件。卸载只需移除这两处。
-
-1. 打开 `settings.json`（路径见上方[方式四](#方式四手动配置)第 1 步）
-2. 在 `extraKnownMarketplaces` 中删除 `"ecd-marketplace"` 条目
-3. 在 `enabledPlugins` 中删除 `"ecd@ecd-marketplace"` 条目
-4. 重启 Claude Code
-
-> 💡 如果 `extraKnownMarketplaces` 或 `enabledPlugins` 在删除后变为空对象 `{}`，可保留空对象或整行删除。
-
----
-
-### 方式三：插件命令安装的卸载
-
-在终端中执行：
-
-```bash
-# 禁用插件
-claude plugins disable ecd@ecd-marketplace
-
-# 移除 marketplace 源
-claude plugins source remove ecd-marketplace
-```
-
-重启 Claude Code 即可。
-
----
-
-### 方式四：手动配置的卸载
-
-同方式二：在 `settings.json` 中移除 `ecd-marketplace` 和 `ecd@ecd-marketplace` 条目，重启 Claude Code 即可。
-
----
-
-### 方式五/六：手动/命令行安装的卸载
-
-直接删除 skills 目录中的 ECD 文件夹：
-
-```powershell
-# Windows (PowerShell) — 用户级
-Remove-Item -Recurse -Force $env:USERPROFILE\.claude\skills\evolutionary-constraint-development
-
-# Windows (PowerShell) — 项目级（在项目根目录执行）
-Remove-Item -Recurse -Force .\.claude\skills\evolutionary-constraint-development
-```
-
-```bash
-# macOS / Linux — 用户级
-rm -rf ~/.claude/skills/evolutionary-constraint-development
-
-# macOS / Linux — 项目级
-rm -rf /path/to/your-project/.claude/skills/evolutionary-constraint-development
-```
+同方式五：删除 `.claude/skills/` 中的 `evolutionary-constraint-development` 文件夹。
 
 ---
 
@@ -365,7 +341,7 @@ rm -rf /path/to/your-project/.claude/skills/evolutionary-constraint-development
 npm uninstall -g @zyc-bryce/ecd
 ```
 
-> ⚠️ **注意**：npm 卸载仅移除 npm 全局包本身，不会自动清理 `settings.json` 中的 marketplace/plugin 注册。如果之前也通过 npx 注册过，仍需按方式二清理 `settings.json`。
+> ⚠️ **注意**：npm 卸载仅移除 npm 全局包本身，不会自动清理 `settings.json` 中的 marketplace/plugin 注册。如果之前也通过 npx 注册过，仍需按方式二/四清理 `settings.json`。
 
 ---
 

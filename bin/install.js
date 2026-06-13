@@ -60,8 +60,79 @@ function writeSettings(filePath, data) {
   fs.writeFileSync(filePath, JSON.stringify(data, null, 2) + '\n', 'utf-8');
 }
 
+// ── uninstall ────────────────────────────────────────
+function uninstall() {
+  const header = `
+  ╔══════════════════════════════════════════════╗
+  ║     ECD — 卸载                          ║
+  ║     Evolutionary Constraint Development       ║
+  ╚══════════════════════════════════════════════╝
+
+  正在从 settings.json 中移除 ECD 配置…
+  `;
+  console.log(header);
+
+  const filePath = settingsPath();
+  console.log('  📁 settings.json: %s\n', filePath);
+
+  const settings = readSettings(filePath);
+
+  let changed = false;
+
+  // ── Step 1: 移除 marketplace ──
+  if (settings.extraKnownMarketplaces && settings.extraKnownMarketplaces[MARKETPLACE_NAME]) {
+    delete settings.extraKnownMarketplaces[MARKETPLACE_NAME];
+    if (Object.keys(settings.extraKnownMarketplaces).length === 0) {
+      delete settings.extraKnownMarketplaces;
+    }
+    console.log('  ✅ 已移除 marketplace: ecd-marketplace');
+    changed = true;
+  } else {
+    console.log('  ⏭️  marketplace 不存在，跳过');
+  }
+
+  // ── Step 2: 禁用插件 ──
+  if (settings.enabledPlugins && settings.enabledPlugins[PLUGIN_KEY]) {
+    delete settings.enabledPlugins[PLUGIN_KEY];
+    if (Object.keys(settings.enabledPlugins).length === 0) {
+      delete settings.enabledPlugins;
+    }
+    console.log('  ✅ 已禁用插件: ecd@ecd-marketplace');
+    changed = true;
+  } else {
+    console.log('  ⏭️  插件未启用，跳过');
+  }
+
+  // ── Step 3: 写入 ──
+  if (changed) {
+    writeSettings(filePath, settings);
+    console.log('\n  💾 已保存 settings.json');
+  } else {
+    console.log('\n  ℹ️  未找到 ECD 配置，无需操作');
+  }
+
+  console.log(`
+  ┌──────────────────────────────────────────────┐
+  │  🧹 ECD 卸载完成                              │
+  │                                              │
+  │  重启 Claude Code 后生效                      │
+  │                                              │
+  │  如需重新安装：                                │
+  │  npx @zyc-bryce/ecd                          │
+  │                                              │
+  │  文档：https://github.com/Zyc-Bryce/ECD       │
+  └──────────────────────────────────────────────┘
+  `);
+}
+
 // ── main ──────────────────────────────────────────────
 function main() {
+  // ── 卸载模式 ──
+  if (process.argv.includes('--uninstall') || process.argv.includes('-u')) {
+    uninstall();
+    process.exit(0);
+  }
+
   const header = `
   ╔══════════════════════════════════════════════╗
   ║     ECD — 演进约束开发           v${PKG_VERSION}     ║
@@ -127,8 +198,7 @@ function main() {
   │  （查看 ecd@ecd-marketplace 的 Version 字段）  │
   │                                              │
   │  卸载：                                      │
-  │  从 settings.json 中删除 ecd-marketplace       │
-  │  和 ecd@ecd-marketplace 即可                  │
+  │  npx @zyc-bryce/ecd --uninstall              │
   │                                              │
   │  文档：https://github.com/Zyc-Bryce/ECD       │
   └──────────────────────────────────────────────┘

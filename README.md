@@ -23,8 +23,7 @@ Raw request → frozen meaning → code-ready handoff → run evidence → achie
 - [Why ECD](#why-ecd)
 - [What This Repository Contains](#what-this-repository-contains)
 - [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Uninstall](#uninstall)
+- [Installation & Uninstall](#installation--uninstall)
 - [CLI Quick Start](#cli-quick-start)
 - [Required Claude Code Capabilities](#required-claude-code-capabilities)
 - [Repository Map](#repository-map)
@@ -75,71 +74,119 @@ The core philosophy: **planning owns meaning, coding owns execution, and closure
 - **Claude Code** — latest version recommended. ECD relies on the `Agent` tool for spawning independent subagents during critical review stages.
 - **Python 3.8+** — required only if you use the CLI helper scripts (`skills/ecd/scripts/`). All scripts use only the Python standard library, with one optional exception:
   - **pyyaml** (optional) — `pip install pyyaml`. Only needed by `render_obsidian_bundle.py` for full YAML schema parsing; the script gracefully falls back to a built-in default schema without it.
-- **Git** — required only if you install via `git clone` (Methods 5 and 6 below).
+- **Git** — required only if you install via `git clone` (Methods 3 and 6 below).
 
-## Installation
+## Installation & Uninstall
 
-Choose one of the methods below.
+Choose **one** method. Each method includes its own uninstall instructions — no need to look elsewhere.
 
 ---
 
 ### Method 1: npx skills add (⭐ Recommended)
 
+One command — auto-discovers and installs the skill. The installer places files under `.agents/skills/ecd/` (the universal skills directory shared across Claude Code, Copilot, Cline, and other agents) and automatically creates a Junction so Claude Code discovers the skill immediately.
+
+#### Install
+
 ```bash
-npx skills add Zyc-Bryce/ECD --skill ecd -g
+npx skills add Zyc-Bryce/ECD
 ```
 
-One command — auto-discovers and installs the skill globally. No manual steps.
+Restart Claude Code and type `/ecd` to verify.
+
+> 🔧 **Troubleshooting**: In some environments the `.claude/skills/ecd` Junction may not be created automatically. If `/ecd` doesn't appear after install, check and create it manually:
+>
+> **Windows (PowerShell):**
+> ```powershell
+> if (-not (Test-Path "$env:USERPROFILE\.claude\skills\ecd")) {
+>   New-Item -ItemType Junction -Path "$env:USERPROFILE\.claude\skills\ecd" -Target "$env:USERPROFILE\.agents\skills\ecd" -Force
+> }
+> ```
+>
+> **macOS / Linux:**
+> ```bash
+> [ ! -e ~/.claude/skills/ecd ] && ln -s ~/.agents/skills/ecd ~/.claude/skills/ecd
+> ```
+
+#### Uninstall
+
+```bash
+npx skills remove ecd
+```
 
 ---
 
 ### Method 2: npx One-Liner (⭐ Easiest)
 
+Auto-configures Claude Code by registering the marketplace source and enabling the plugin. Functionally equivalent to Method 4's manual configuration.
+
+#### Install
+
 ```bash
 npx @zyc-bryce/ecd
 ```
 
-Auto-configures Claude Code (adds marketplace + enables plugin). Restart and you're done. No manual file editing.
+Restart Claude Code and type `/ecd` to verify.
 
-> 💡 This command only edits `settings.json` — functionally equivalent to Method 4's manual configuration below.
+> 💡 This command only edits `settings.json` — adds `ecd-marketplace` to `extraKnownMarketplaces` and enables `ecd@ecd-marketplace` in `enabledPlugins`.
+
+#### Uninstall
+
+```bash
+npx @zyc-bryce/ecd --uninstall
+```
+
+Automatically removes the `ecd-marketplace` and `ecd@ecd-marketplace` entries from `settings.json`. Restart Claude Code afterwards.
 
 ---
 
-### Method 3: Plugin Command (⭐ Recommended)
+### Method 3: Plugin Command
 
 Use Claude Code's built-in plugin system — auto-download, auto-update, no manual file management.
 
-#### Step 1 — Add marketplace source
+#### Install
 
-Run this in your terminal:
+**Step 1 — Add marketplace source** (run in terminal):
 
 ```bash
 claude plugin source add ecd-marketplace --source github --repo Zyc-Bryce/ECD
 ```
 
-#### Step 2 — Install the plugin
-
-Start Claude Code and type:
+**Step 2 — Install the plugin** (type in Claude Code):
 
 ```
 /plugin install ecd@ecd-marketplace
 ```
 
-#### Step 3 — Restart Claude Code
+**Step 3 — Restart** Claude Code. Type `/ecd` to verify.
 
-Close and reopen Claude Code. Type `/ecd` to verify — if you see the ECD prompt, you're all set.
-
-> ✅ **Advantage**: Claude Code will automatically detect new versions. No manual file management needed.
+> ✅ **Advantage**: Claude Code will automatically detect new versions.
 >
 > 🔧 **Troubleshooting**: If `/ecd` doesn't appear after restart, run `claude plugin list` in terminal to check the ECD plugin status. If it shows `failed to load` with "conflicting manifests" error, the `marketplace.json` and `plugin.json` have duplicate component declarations — update to the latest version or check [GitHub Issues](https://github.com/Zyc-Bryce/ECD/issues).
+
+#### Uninstall
+
+Run in terminal:
+
+```bash
+# Disable the plugin
+claude plugins disable ecd@ecd-marketplace
+
+# Remove the marketplace source
+claude plugins source remove ecd-marketplace
+```
+
+Restart Claude Code.
 
 ---
 
 ### Method 4: Manual Config
 
-Prefer to edit config files directly? Add a few lines to your Claude Code settings.
+Prefer to edit config files directly? Add a few lines to your Claude Code settings. Same result as Methods 2 and 3 — Claude Code handles updates automatically.
 
-#### Step 1 — Open your settings file
+#### Install
+
+**Step 1 — Open your settings file**
 
 | OS | Config file path |
 |---|---|
@@ -148,9 +195,9 @@ Prefer to edit config files directly? Add a few lines to your Claude Code settin
 
 > If the file doesn't exist, create an empty JSON file: `{}`
 
-#### Step 2 — Add ECD marketplace and enable plugin
+**Step 2 — Add ECD marketplace and enable plugin**
 
-Add these entries to `settings.json`:
+Add (or merge) these entries into `settings.json`:
 
 ```json
 {
@@ -170,186 +217,119 @@ Add these entries to `settings.json`:
 
 > 💡 If `extraKnownMarketplaces` or `enabledPlugins` already exist, **merge** the new entries — don't overwrite existing content.
 
-#### Step 3 — Restart Claude Code
+**Step 3 — Restart** Claude Code. Type `/ecd` to verify.
 
-Close and reopen Claude Code. Type `/ecd` to verify — if you see the ECD prompt, you're all set.
+#### Uninstall
 
-> ✅ **Advantage**: Same as Method 3 — Claude Code will automatically detect new versions.
+1. Open `settings.json`
+2. Remove the `"ecd-marketplace"` entry from `extraKnownMarketplaces`
+3. Remove the `"ecd@ecd-marketplace"` entry from `enabledPlugins`
+4. Restart Claude Code
 
 ---
 
-### Method 5: Command-Line Install
+### Method 5: Command-Line (git clone + copy)
 
-#### Windows (PowerShell)
+Clone the repository and copy it into your skills directory.
 
+#### Install
+
+**Clone anywhere, then copy:**
+
+*Windows (PowerShell):*
 ```powershell
-# Clone the repository
 git clone https://github.com/Zyc-Bryce/ECD.git evolutionary-constraint-development
 
-# --- User-level install (available in every project) ---
+# User-level (available in every project)
 Copy-Item -Recurse evolutionary-constraint-development $env:USERPROFILE\.claude\skills\
 
-# --- Project-level install (only for the current project) ---
-# First navigate to your project root, then:
+# Project-level (run in project root)
 Copy-Item -Recurse evolutionary-constraint-development .\.claude\skills\
 ```
 
-#### macOS / Linux
-
+*macOS / Linux:*
 ```bash
-# Clone the repository
 git clone https://github.com/Zyc-Bryce/ECD.git evolutionary-constraint-development
 
-# User-level install (available in every project)
+# User-level
 cp -r evolutionary-constraint-development ~/.claude/skills/
 
-# Project-level install (only for the current project)
+# Project-level
 cp -r evolutionary-constraint-development /path/to/your-project/.claude/skills/
 ```
 
-#### Direct Clone Into Skills Directory (all platforms)
+**Or clone directly into skills directory:**
 
 ```bash
-# Windows (PowerShell):
+# Windows (PowerShell)
 git clone https://github.com/Zyc-Bryce/ECD.git $env:USERPROFILE\.claude\skills\evolutionary-constraint-development
 
-# macOS / Linux:
+# macOS / Linux
 git clone https://github.com/Zyc-Bryce/ECD.git ~/.claude/skills/evolutionary-constraint-development
 ```
 
-After installation, the skill is automatically discovered the next time you start Claude Code in the relevant directory.
+The skill is automatically discovered the next time you start Claude Code.
+
+#### Uninstall
+
+Delete the ECD folder from your skills directory:
+
+*Windows (PowerShell):*
+```powershell
+# User-level
+Remove-Item -Recurse -Force $env:USERPROFILE\.claude\skills\evolutionary-constraint-development
+
+# Project-level (run in project root)
+Remove-Item -Recurse -Force .\.claude\skills\evolutionary-constraint-development
+```
+
+*macOS / Linux:*
+```bash
+# User-level
+rm -rf ~/.claude/skills/evolutionary-constraint-development
+
+# Project-level
+rm -rf /path/to/your-project/.claude/skills/evolutionary-constraint-development
+```
 
 ---
 
 ### Method 6: Manual Install (No Terminal Required)
 
-If you prefer to avoid the command line, follow these steps.
+Download the ZIP, extract, and copy to the right folder.
 
-#### Step 1 — Download
+#### Install
 
-Visit https://github.com/Zyc-Bryce/ECD and click **Code → Download ZIP**. Extract the ZIP to a folder of your choice.
+**Step 1 — Download:** Visit https://github.com/Zyc-Bryce/ECD → **Code → Download ZIP**. Extract to a folder of your choice (e.g., `C:\Users\Alice\Downloads\evolutionary-constraint-development`).
 
-**Example:** Extract to `C:\Users\Alice\Downloads\evolutionary-constraint-development`.
+**Step 2 — Choose scope and copy:**
 
-#### Step 2 — Choose install scope
+<details>
+<summary><b>Option A: User-level</b> (available in every project) — click to expand</summary>
 
-Pick **one** of the two options below. *(The following steps are for Windows. macOS/Linux users: see the dedicated section below.)*
+1. Open File Explorer, navigate to `%USERPROFILE%\.claude\skills\`. Create the `skills` folder if it doesn't exist.
+2. Copy the extracted `evolutionary-constraint-development` folder into `skills\`.
+3. After copying: `C:\Users\Alice\.claude\skills\evolutionary-constraint-development\SKILL.md`
 
----
+</details>
 
-**Option A: User-level install (the skill is available in every project)**
+<details>
+<summary><b>Option B: Project-level</b> (only for one project) — click to expand</summary>
 
-1. Open File Explorer and navigate to `%USERPROFILE%\.claude\skills\`.
+1. Navigate to your project root (e.g., `C:\Users\Alice\Projects\my-app`).
+2. Create `.claude\skills\` if it doesn't exist.
+3. Copy the extracted folder into `.claude\skills\`.
+4. After copying: `C:\Users\Alice\Projects\my-app\.claude\skills\evolutionary-constraint-development\SKILL.md`
 
-   *For Alice, the full path is:* `C:\Users\Alice\.claude\skills\`
+</details>
 
-2. If the `skills` folder does not exist, create it:
-   - Right-click → **New → Folder**, name it `skills`.
+**macOS / Linux users:** Same steps — copy the extracted folder to `~/.claude/skills/` (user-level) or `<your-project>/.claude/skills/` (project-level). Enable "Show Hidden Files" to see the `.claude` folder.
 
-3. Copy (or move) the `evolutionary-constraint-development` folder you extracted in Step 1 into `skills\`.
+Restart Claude Code and the skill will be discovered automatically.
 
-   *After copying, the path should look like:* `C:\Users\Alice\.claude\skills\evolutionary-constraint-development\SKILL.md`
+#### Uninstall
 
----
-
-**Option B: Project-level install (the skill is only available in one project)**
-
-1. In File Explorer, navigate to your project root.
-
-   *For example:* `C:\Users\Alice\Projects\my-app`
-
-2. Inside the project, look for a `.claude` folder. If it doesn't exist, create it:
-   - Right-click → **New → Folder**, name it `.claude`
-   - *Windows may warn about names starting with a dot — that's OK, confirm it.*
-
-3. Inside `.claude`, look for a `skills` folder. If it doesn't exist, create it.
-
-4. Copy (or move) the `evolutionary-constraint-development` folder you extracted in Step 1 into `.claude\skills\`.
-
-   *After copying, the path should look like:* `C:\Users\Alice\Projects\my-app\.claude\skills\evolutionary-constraint-development\SKILL.md`
-
----
-
-After either option, restart Claude Code (or start it in the relevant project directory), and the skill will be discovered automatically.
-
----
-
-#### macOS / Linux Users
-
-1. Visit https://github.com/Zyc-Bryce/ECD and click **Code → Download ZIP**.
-2. Extract the ZIP to a folder (e.g., `~/Downloads/evolutionary-constraint-development`).
-3. Open Finder (macOS) or your file manager (Linux). Enable "Show Hidden Files" so the `.claude` folder is visible.
-4. **User-level:** Copy the extracted folder into `~/.claude/skills/`. Create `skills/` inside `~/.claude/` if it doesn't exist.
-5. **Project-level:** Copy the extracted folder into `<your-project>/.claude/skills/`.
-
-## Uninstall
-
-Choose the method matching your installation.
-
----
-
-### Method 1: npx skills add → Uninstall
-
-```bash
-npx skills remove ecd -g
-```
-
----
-
-### Method 2: npx Install → Uninstall
-
-The npx one-liner only edits `settings.json`. To undo:
-
-1. Open `settings.json` (see [Method 4](#method-4-manual-config) Step 1 for paths)
-2. Remove the `"ecd-marketplace"` entry from `extraKnownMarketplaces`
-3. Remove the `"ecd@ecd-marketplace"` entry from `enabledPlugins`
-4. Restart Claude Code
-
-> 💡 If `extraKnownMarketplaces` or `enabledPlugins` become empty `{}`, you can keep or remove them.
-
----
-
-### Method 3: Plugin Command → Uninstall
-
-Run in terminal:
-
-```bash
-# Disable the plugin
-claude plugins disable ecd@ecd-marketplace
-
-# Remove the marketplace source
-claude plugins source remove ecd-marketplace
-```
-
-Restart Claude Code.
-
----
-
-### Method 4: Manual Config → Uninstall
-
-Same as Method 2: remove the `ecd-marketplace` and `ecd@ecd-marketplace` entries from `settings.json`, then restart.
-
----
-
-### Method 5 / 6: Manual / Command-Line → Uninstall
-
-Delete the ECD folder from your skills directory:
-
-```powershell
-# Windows (PowerShell) — user-level
-Remove-Item -Recurse -Force $env:USERPROFILE\.claude\skills\evolutionary-constraint-development
-
-# Windows (PowerShell) — project-level (run in project root)
-Remove-Item -Recurse -Force .\.claude\skills\evolutionary-constraint-development
-```
-
-```bash
-# macOS / Linux — user-level
-rm -rf ~/.claude/skills/evolutionary-constraint-development
-
-# macOS / Linux — project-level
-rm -rf /path/to/your-project/.claude/skills/evolutionary-constraint-development
-```
+Same as Method 5: delete the `evolutionary-constraint-development` folder from `.claude/skills/`.
 
 ---
 
