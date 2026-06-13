@@ -84,17 +84,21 @@ Choose **one** method. Each method includes its own uninstall instructions — n
 
 ### Method 1: npx skills add (⭐ Recommended)
 
-One command — auto-discovers and installs the skill. The installer places files under `.agents/skills/ecd/` (the universal skills directory shared across Claude Code, Copilot, Cline, and other agents) and automatically creates a Junction so Claude Code discovers the skill immediately.
+One command — auto-discovers and installs the skill globally. The installer clones the repository, places files under `.agents/skills/ecd/` (the universal skills directory shared across Claude Code, Copilot, Cline, and other agents), and automatically creates a Junction (Windows) / symlink (macOS/Linux) at `.claude/skills/ecd` so Claude Code discovers the skill immediately.
 
 #### Install
 
 ```bash
-npx skills add Zyc-Bryce/ECD
+npx skills add Zyc-Bryce/ECD -g
 ```
+
+> **Flags explained:**
+> - `-g` — install globally to `~/.agents/skills/` (user-level, available in every project). Omit for a local `.agents/skills/` install in the current directory.
+> - `-y` — (optional) skip confirmation prompts for non-interactive environments.
 
 Restart Claude Code and type `/ecd` to verify.
 
-> 🔧 **Troubleshooting**: In some environments the `.claude/skills/ecd` Junction may not be created automatically. If `/ecd` doesn't appear after install, check and create it manually:
+> 🔧 **Troubleshooting**: In rare edge cases (e.g., permission-restricted environments or non-standard home directories), the `.claude/skills/ecd` Junction/symlink may not be created automatically. If `/ecd` doesn't appear after install, create it manually:
 >
 > **Windows (PowerShell):**
 > ```powershell

@@ -84,17 +84,21 @@ ECD 会在一行代码被写出来之前就强制执行**语义冻结**：
 
 ### 方式一：npx skills add（⭐ 推荐）
 
-一条命令自动发现并安装技能。安装器将文件放入 `.agents/skills/ecd/`（通用技能目录，跨 Claude Code、Copilot、Cline 等平台共享），并自动创建 Junction 以便 Claude Code 立即发现。
+一条命令自动发现并全局安装技能。安装器会克隆仓库，将文件放入 `.agents/skills/ecd/`（通用技能目录，跨 Claude Code、Copilot、Cline 等平台共享），并自动在 `.claude/skills/ecd` 创建 Junction（Windows）/ 符号链接（macOS/Linux），使 Claude Code 立即发现技能。
 
 #### 安装
 
 ```bash
-npx skills add Zyc-Bryce/ECD
+npx skills add Zyc-Bryce/ECD -g
 ```
+
+> **参数说明：**
+> - `-g` — 全局安装到 `~/.agents/skills/`（用户级，所有项目可用）。不加此参数则安装到当前目录的 `.agents/skills/`。
+> - `-y` —（可选）在非交互环境中跳过确认提示。
 
 重启 Claude Code 后输入 `/ecd` 验证。
 
-> 🔧 **故障排查**：少数环境下 `.claude/skills/ecd` Junction 可能未自动生成。如果安装后 `/ecd` 未出现，检查并手动创建：
+> 🔧 **故障排查**：极少数情况下（如权限受限环境或非标准用户目录），`.claude/skills/ecd` Junction/符号链接可能未自动生成。如果安装后 `/ecd` 未出现，手动创建：
 >
 > **Windows (PowerShell):**
 > ```powershell
