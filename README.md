@@ -84,21 +84,32 @@ Choose **one** method. Each method includes its own uninstall instructions — n
 
 ### Method 1: npx skills add (⭐ Recommended)
 
-One command — auto-discovers and installs the skill globally. The installer clones the repository, places files under `.agents/skills/ecd/` (the universal skills directory shared across Claude Code, Copilot, Cline, and other agents), and automatically creates a Junction (Windows) / symlink (macOS/Linux) at `.claude/skills/ecd` so Claude Code discovers the skill immediately.
+One command — auto-discovers and installs the skill. The installer clones the repository, places files under `.agents/skills/ecd/` (the universal skills directory), and automatically creates a Junction (Windows) / symlink (macOS/Linux) at `.claude/skills/ecd` so Claude Code discovers the skill immediately.
+
+> 📖 **Skills CLI docs:** [skills.sh](https://skills.sh) · [GitHub (vercel-labs/skills)](https://github.com/vercel-labs/skills)
 
 #### Install
 
 ```bash
-npx skills add Zyc-Bryce/ECD -g
+npx skills add Zyc-Bryce/ECD
 ```
 
-> **Flags explained:**
-> - `-g` — install globally to `~/.agents/skills/` (user-level, available in every project). Omit for a local `.agents/skills/` install in the current directory.
-> - `-y` — (optional) skip confirmation prompts for non-interactive environments.
+> ⚠️ **Critical: Use SPACE to select Claude Code!** After running the command, an interactive list of supported platforms appears. **Press Space** to check "Claude Code" (and any other agents you use), **then press Enter** to confirm. If you press Enter without selecting anything, the Junction will not be created and `/ecd` will not appear.
+>
+> ```
+> ◇  Select agents to install to (press Space to select)
+> │
+> □  Claude Code          ← press Space to check this box
+> □  GitHub Copilot
+> □  Cline
+> ...
+> ```
 
 Restart Claude Code and type `/ecd` to verify.
 
-> 🔧 **Troubleshooting**: In rare edge cases (e.g., permission-restricted environments or non-standard home directories), the `.claude/skills/ecd` Junction/symlink may not be created automatically. If `/ecd` doesn't appear after install, create it manually:
+> 🔧 **Troubleshooting**: If `/ecd` doesn't appear after install, the most common causes are:
+> 1. **You didn't press Space to select "Claude Code"** in the interactive prompt — re-run the command and make sure to check the box.
+> 2. **Permission-restricted or non-standard home directory** — manually create the Junction/symlink:
 >
 > **Windows (PowerShell):**
 > ```powershell

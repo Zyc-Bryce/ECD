@@ -84,21 +84,32 @@ ECD 会在一行代码被写出来之前就强制执行**语义冻结**：
 
 ### 方式一：npx skills add（⭐ 推荐）
 
-一条命令自动发现并全局安装技能。安装器会克隆仓库，将文件放入 `.agents/skills/ecd/`（通用技能目录，跨 Claude Code、Copilot、Cline 等平台共享），并自动在 `.claude/skills/ecd` 创建 Junction（Windows）/ 符号链接（macOS/Linux），使 Claude Code 立即发现技能。
+一条命令自动发现并安装技能。安装器会克隆仓库，将文件放入 `.agents/skills/ecd/`（通用技能目录），并自动在 `.claude/skills/ecd` 创建 Junction（Windows）/ 符号链接（macOS/Linux），使 Claude Code 立即发现技能。
+
+> 📖 **Skills CLI 文档：** [skills.sh](https://skills.sh) · [GitHub (vercel-labs/skills)](https://github.com/vercel-labs/skills)
 
 #### 安装
 
 ```bash
-npx skills add Zyc-Bryce/ECD -g
+npx skills add Zyc-Bryce/ECD
 ```
 
-> **参数说明：**
-> - `-g` — 全局安装到 `~/.agents/skills/`（用户级，所有项目可用）。不加此参数则安装到当前目录的 `.agents/skills/`。
-> - `-y` —（可选）在非交互环境中跳过确认提示。
+> ⚠️ **关键操作：用空格键勾选 Claude Code！** 运行命令后会出现一个交互式平台列表。**按空格键**勾选「Claude Code」（以及你使用的其他平台），**再按回车确认**。如果直接按回车而没有勾选任何平台，Junction 不会被创建，`/ecd` 也不会出现。
+>
+> ```
+> ◇  Select agents to install to (press Space to select)
+> │
+> □  Claude Code          ← 按空格键勾选此项
+> □  GitHub Copilot
+> □  Cline
+> ...
+> ```
 
 重启 Claude Code 后输入 `/ecd` 验证。
 
-> 🔧 **故障排查**：极少数情况下（如权限受限环境或非标准用户目录），`.claude/skills/ecd` Junction/符号链接可能未自动生成。如果安装后 `/ecd` 未出现，手动创建：
+> 🔧 **故障排查**：如果安装后 `/ecd` 未出现，最常见的原因是：
+> 1. **没有按空格键勾选「Claude Code」**——重新运行命令，务必在交互式列表中勾选。
+> 2. **权限受限或非标准用户目录**——手动创建 Junction/符号链接：
 >
 > **Windows (PowerShell):**
 > ```powershell
