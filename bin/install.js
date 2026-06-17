@@ -39,6 +39,11 @@ function settingsPath() {
   return path.join(home, '.claude', 'settings.json');
 }
 
+function skillsDir() {
+  const home = os.homedir();
+  return path.join(home, '.claude', 'skills');
+}
+
 function readSettings(filePath) {
   if (!fs.existsSync(filePath)) return {};
   try {
@@ -58,6 +63,23 @@ function writeSettings(filePath, data) {
     fs.mkdirSync(dir, { recursive: true });
   }
   fs.writeFileSync(filePath, JSON.stringify(data, null, 2) + '\n', 'utf-8');
+}
+
+/** 递归复制目录 */
+function copyDirectory(src, dest) {
+  if (!fs.existsSync(dest)) {
+    fs.mkdirSync(dest, { recursive: true });
+  }
+  const entries = fs.readdirSync(src, { withFileTypes: true });
+  for (const entry of entries) {
+    const srcPath = path.join(src, entry.name);
+    const destPath = path.join(dest, entry.name);
+    if (entry.isDirectory()) {
+      copyDirectory(srcPath, destPath);
+    } else {
+      fs.copyFileSync(srcPath, destPath);
+    }
+  }
 }
 
 // ── uninstall ────────────────────────────────────────
@@ -103,7 +125,16 @@ function uninstall() {
     console.log('  ⏭️  插件未启用，跳过');
   }
 
-  // ── Step 3: 写入 ──
+  // ── Step 3: 移除技能文件 ──
+  const destSkillsDir = skillsDir();
+  const skillDir = path.join(destSkillsDir, 'ecd');
+  if (fs.existsSync(skillDir)) {
+    fs.rmSync(skillDir, { recursive: true, force: true });
+    console.log('  ✅ 已删除技能目录: ecd');
+    changed = true;
+  }
+
+  // ── Step 4: 写入 settings.json ──
   if (changed) {
     writeSettings(filePath, settings);
     console.log('\n  💾 已保存 settings.json');
@@ -115,6 +146,7 @@ function uninstall() {
   ┌──────────────────────────────────────────────┐
   │  🧹 ECD 卸载完成                              │
   │                                              │
+  │  已移除技能文件和 marketplace 配置            │
   │  重启 Claude Code 后生效                      │
   │                                              │
   │  如需重新安装：                                │
@@ -176,7 +208,22 @@ function main() {
     console.log('  ⏭️  插件已启用，跳过');
   }
 
-  // ── Step 3: 写入 ──
+  // ── Step 3: 直接复制技能文件到 ~/.claude/skills/ ──
+  // 这样即使 GitHub 不可达（国内网络），技能也能立即可用
+  const pkgRoot = path.join(__dirname, '..');
+  const pkgSkillsDir = path.join(pkgRoot, 'skills', 'ecd');
+  const destSkillsDir = skillsDir();
+
+  if (fs.existsSync(pkgSkillsDir)) {
+    const dest = path.join(destSkillsDir, 'ecd');
+    copyDirectory(pkgSkillsDir, dest);
+    console.log('  ✅ 已安装技能: /ecd');
+    changed = true;
+  } else {
+    console.log('  ⚠️  未找到 skills/ecd/ 目录，跳过直接复制（将依赖 marketplace 下载）');
+  }
+
+  // ── Step 4: 写入 settings.json ──
   if (changed) {
     writeSettings(filePath, settings);
     console.log('\n  💾 已保存 settings.json');
@@ -187,15 +234,10 @@ function main() {
   // ── 完成信息 ──
   console.log(`
   ┌──────────────────────────────────────────────┐
-  │  🎉 ECD v${PKG_VERSION} 配置完成！                   │
+  │  🎉 ECD v${PKG_VERSION} 安装完成！                  │
   │                                              │
-  │  下一步：                                     │
-  │  1. 重启 Claude Code                          │
-  │  2. 输入 /ecd 开始使用                         │
-  │                                              │
-  │  验证版本：                                   │
-  │  claude plugin list                          │
-  │  （查看 ecd@ecd-marketplace 的 Version 字段）  │
+  │  重启 Claude Code 后可用命令：                 │
+  │  /ecd    演进约束开发                          │
   │                                              │
   │  卸载：                                      │
   │  npx @zyc-bryce/ecd --uninstall              │
